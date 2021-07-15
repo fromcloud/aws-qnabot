@@ -3,6 +3,7 @@ var api=new aws.APIGateway()
 
 module.exports=class ApiCompression {
     Create(params,reply){
+        console.log("APICompression ",params,reply)
         api.updateRestApi({
             restApiId:params.restApiId,
             patchOperations:[{
