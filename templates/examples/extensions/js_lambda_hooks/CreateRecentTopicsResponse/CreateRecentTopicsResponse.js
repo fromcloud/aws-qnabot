@@ -1,16 +1,16 @@
 const _ = require("lodash");
-exports.handler = async function(event, context) {
-  let step = _.get(event,"req._fulfillment.step")
-  var userTopics = _.get(event,"res._userInfo.recentTopics",[])
-
+exports.handler = async function (event, context) {
+  let step = _.get(event, "req._fulfillment.step")
+  let topics = _.get(event, "res._userInfo.recentTopics", [])
+  console.log(userTopic)
   console.log(event);
   console.log("Step " + step)
-  if(step == "postprocess"){
-    if(userTopics.length == 0){
-      let recentTopicButton = _.get(event,"req._settings.RECENT_TOPICS_BUTTON_VALUE","")
+  if (step == "postprocess") {
+    if (topics.length == 0) {
+      let recentTopicButton = _.get(event, "req._settings.RECENT_TOPICS_BUTTON_VALUE", "")
       console.log(recentTopicButton)
-      if(recentTopicButton){
-        let buttons = _.get(event,"res.card.buttons",[])
+      if (recentTopicButton) {
+        let buttons = _.get(event, "res.card.buttons", [])
         let filteredButtons = buttons.filter(r => r.value != recentTopicButton)
         event.res.card.buttons = filteredButtons
       }
@@ -18,9 +18,10 @@ exports.handler = async function(event, context) {
     return event
   }
 
-  if(step == "preprocess"){
+  if (step == "preprocess") {
     return event
   }
+  console.log("Step == Regular processing")
   //Retrieve the args passed in via the Content Designer
   var args = _.get(event, "res.result.args");
   var start = 0;
@@ -54,12 +55,13 @@ exports.handler = async function(event, context) {
   //Retrieve the "recent topics" from the userInfo object.  
   //All properties stored in the DynamoDB table for a user will be part
   //of the res._userInfo object
-  var userTopics = userTopics.sort((t1, t2) => {
+  var userTopics = event.res._userInfo.recentTopics.sort((t1, t2) => {
     if (t1.dateTime == t2.dateTime) {
       return 0;
     }
     return t2.dateTime < t1.dateTime ? -1 : 1;
   });
+
 
   for (var userTopic of userTopics.slice(start, end)) {
     if (!(userTopic.topic in topicMap)) {
@@ -70,8 +72,8 @@ exports.handler = async function(event, context) {
     if (!description || !qid) {
       console.log(
         "WARNING: The topic mapping topic::" +
-          userTopic.topic +
-          " is not defined properly.  The format should be <description>::<QID>. Using the description as the value."
+        userTopic.topic +
+        " is not defined properly.  The format should be <description>::<QID>. Using the description as the value."
       );
     }
 
