@@ -219,13 +219,19 @@ module.exports=async function preprocess(req,res){
     _.set(req,"_info.es.type",process.env.ES_TYPE)
     _.set(req,"_info.es.service.qid",process.env.ES_SERVICE_QID)
     _.set(req,"_info.es.service.proxy",process.env.ES_SERVICE_PROXY)
+    _.set(req,"_fulfillment.step","preprocess")
+    console.log("Befoor ")
+    console.log(req)
     let prehook = _.get(req,'_settings.LAMBDA_PREPROCESS_HOOK',undefined) || process.env.LAMBDA_PREPROCESS
     if(prehook){
-        return await util.invokeLambda({
+        let result = await util.invokeLambda({
             FunctionName:prehook,
             req,res
         })
+        _.set(req,"_fulfillment.step","")
+        return result
     }else{
+        _.set(req,"_fulfillment.step","")
         return {req,res}
     }
 }

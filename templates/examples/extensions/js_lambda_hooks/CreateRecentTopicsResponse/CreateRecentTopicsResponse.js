@@ -1,7 +1,26 @@
 const _ = require("lodash");
 exports.handler = async function(event, context) {
-  //
+  let step = _.get(event,"req._fulfillment.step")
+  var userTopics = _.get(event,"res._userInfo.recentTopics",[])
+
   console.log(event);
+  console.log("Step " + step)
+  if(step == "postprocess"){
+    if(userTopics.length == 0){
+      let recentTopicButton = _.get(event,"req._settings.RECENT_TOPICS_BUTTON_VALUE","")
+      console.log(recentTopicButton)
+      if(recentTopicButton){
+        let buttons = _.get(event,"res.card.buttons",[])
+        let filteredButtons = buttons.filter(r => r.value != recentTopicButton)
+        event.res.card.buttons = filteredButtons
+      }
+    }
+    return event
+  }
+
+  if(step == "preprocess"){
+    return event
+  }
   //Retrieve the args passed in via the Content Designer
   var args = _.get(event, "res.result.args");
   var start = 0;
@@ -11,7 +30,7 @@ exports.handler = async function(event, context) {
     start = args.start != undefined ? args.start : start;
     end = args.end != undefined ? args.end : end;
   }
-  
+
   var existingButtons = _.get(event, "res.card.buttons", [])
   //Initialize the response card object in the response
   _.set(event, "res.card", {
@@ -35,7 +54,7 @@ exports.handler = async function(event, context) {
   //Retrieve the "recent topics" from the userInfo object.  
   //All properties stored in the DynamoDB table for a user will be part
   //of the res._userInfo object
-  var userTopics = event.res._userInfo.recentTopics.sort((t1, t2) => {
+  var userTopics = userTopics.sort((t1, t2) => {
     if (t1.dateTime == t2.dateTime) {
       return 0;
     }
