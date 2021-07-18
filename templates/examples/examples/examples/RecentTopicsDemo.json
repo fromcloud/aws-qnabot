@@ -89,31 +89,6 @@
       ]
     },
     {
-      "qid": "RecentTopics.General.001",
-      "a": "You can either choose from a topic below, choose \"Show My Previous Topics\" to go back to areas we discussed before or ask a question.",
-      "r": {
-        "title": "Start",
-        "buttons": [
-          {
-            "text": "Artificial Intelligence Services",
-            "value": "QID::RecentTopics.AI.001"
-          },
-          {
-            "text": "Machine Learning Services",
-            "value": "QID::RecentTopics.ML.001"
-          },
-          {
-            "text": "Show my Previous Topics",
-            "value": "QID::RecentTopics.PreviousTopics"
-          }
-        ]
-      },
-      "type": "qna",
-      "q": [
-        "Start over"
-      ]
-    },
-    {
       "qid": "RecentTopics.SageMaker.GroundTruth",
       "a": "Amazon SageMaker Ground Truth is a fully managed data labeling service that makes it easy to build highly accurate training datasets for machine learning. Get started with labeling your data in minutes through the SageMaker Ground Truth console using custom or built-in data labeling workflows. These workflows support a variety of use cases including 3D point clouds, video, images, and text. As part of the workflows, labelers have access to assistive labeling features such as automatic 3D cuboid snapping, removal of distortion in 2D images, and auto-segment tools to reduce the time required to label datasets. In addition, Ground Truth offers automatic data labeling which uses a machine learning model to label your data.",
       "alt": {
@@ -337,6 +312,31 @@
       "type": "qna",
       "q": [
         "Hello"
+      ]
+    },
+    {
+      "qid": "RecentTopics.General.001",
+      "a": "{{#ifCond UserInfo.recentTopics.0.topic \"==\" undefined}}\nYou can choose one of the topics below or ask a question.\n{{else}}\nYou can either choose one of the topics below,  choose \"show me my previous topics\" or ask a question \n{{/ifCond}}",
+      "r": {
+        "title": "Start",
+        "buttons": [
+          {
+            "text": "Artificial Intelligence Services",
+            "value": "QID::RecentTopics.AI.001"
+          },
+          {
+            "text": "Machine Learning Services",
+            "value": "QID::RecentTopics.ML.001"
+          },
+          {
+            "text": "Show my Previous Topics",
+            "value": "QID::RecentTopics.PreviousTopics"
+          }
+        ]
+      },
+      "type": "qna",
+      "q": [
+        "Start over"
       ]
     }
   ]

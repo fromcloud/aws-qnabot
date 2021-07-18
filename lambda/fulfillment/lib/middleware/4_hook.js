@@ -15,7 +15,7 @@ module.exports = async function hook(req,res) {
             ];
     }
 
-    _.set(req,"_fulfillment.step","hook")
+    _.set(req,"_fulfillment.step","lambdahook")
 
     var event = {req,res};
     var i=0;
