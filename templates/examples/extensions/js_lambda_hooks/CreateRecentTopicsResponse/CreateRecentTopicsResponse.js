@@ -1,16 +1,14 @@
 const _ = require("lodash");
+const hook = require("/opt/lib/hook")
+
 exports.handler = async function (event, context) {
-  let step = _.get(event, "req._fulfillment.step")
-  let topics = _.get(event, "res._userInfo.recentTopics", [])
-  console.log(userTopic)
-  console.log(event);
-  console.log("Step " + step)
+  let step = hook.get_step(event)
+  let topics = hook.get_userInfo_property(event, "recentTopics", [])
   if (step == "postprocess") {
     if (topics.length == 0) {
-      let recentTopicButton = _.get(event, "req._settings.RECENT_TOPICS_BUTTON_VALUE", "")
-      console.log(recentTopicButton)
+      let recentTopicButton = hook.get_setting(event, "RECENT_TOPICS_BUTTON_VALUE")
       if (recentTopicButton) {
-        let buttons = _.get(event, "res.card.buttons", [])
+        let buttons = hook.list_response_card_buttons(event)
         let filteredButtons = buttons.filter(r => r.value != recentTopicButton)
         event.res.card.buttons = filteredButtons
       }
@@ -21,27 +19,19 @@ exports.handler = async function (event, context) {
   if (step == "preprocess") {
     return event
   }
-  console.log("Step == Regular processing")
   //Retrieve the args passed in via the Content Designer
-  var args = _.get(event, "res.result.args");
+  var args = hook.get_args(event)
   var start = 0;
   var end = 3;
   if (args) {
-    args = JSON.parse(args);
     start = args.start != undefined ? args.start : start;
     end = args.end != undefined ? args.end : end;
   }
 
-  var existingButtons = _.get(event, "res.card.buttons", [])
-  //Initialize the response card object in the response
-  _.set(event, "res.card", {
-    title: "Recent Topics",
-    send: true,
-    buttons: [],
-  });
+  hook.set_response_card_title("Recent Topics", false)
 
   //Retrieve the settings from the request object
-  var settings = _.get(event, "req._settings", {});
+  var settings = hook.list_settings(event);
   var topicMap = {},
     topicKey;
   for (var key of Object.keys(settings)) {
@@ -55,13 +45,12 @@ exports.handler = async function (event, context) {
   //Retrieve the "recent topics" from the userInfo object.  
   //All properties stored in the DynamoDB table for a user will be part
   //of the res._userInfo object
-  var userTopics = event.res._userInfo.recentTopics.sort((t1, t2) => {
+  var userTopics = hook.get_userInfo_property(event, "recentTopics", []).sort((t1, t2) => {
     if (t1.dateTime == t2.dateTime) {
       return 0;
     }
     return t2.dateTime < t1.dateTime ? -1 : 1;
   });
-
 
   for (var userTopic of userTopics.slice(start, end)) {
     if (!(userTopic.topic in topicMap)) {
@@ -77,13 +66,9 @@ exports.handler = async function (event, context) {
       );
     }
 
-    //Add the buttons to the response object
-    event.res.card.buttons.push({
-      text: description,
-      value: "qid::" + qid,
-    });
+    hook.add_response_card_button(event, description, qid, true, true)
+
 
   }
-  event.res.card.buttons = event.res.card.buttons.concat(existingButtons)
-  return event;
+  return hook.validate_response(event);
 };

@@ -37,7 +37,10 @@ module.exports={
     "VPCSubnetIdList" : {"Type": "String"},
     "VPCSecurityGroupIdList": {"Type": "String"},
     "LexBotVersion": {"Type": "String"},
-    "XraySetting": {"Type": "String"}
+    "XraySetting": {"Type": "String"},
+    "DefaultQnABotSettings": {"Type":"String"}
+
+
   },
    "Conditions": {
     "VPCEnabled": { "Fn::Not": [

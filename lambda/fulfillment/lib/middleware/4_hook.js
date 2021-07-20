@@ -47,7 +47,7 @@ module.exports = async function hook(req,res) {
             FunctionName:posthook,
             req,res
         })
-
+        event = {req,res}
     }
         _.set(req,"_fulfillment.step","")
 
