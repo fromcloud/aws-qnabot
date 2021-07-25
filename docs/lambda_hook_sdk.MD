@@ -15,9 +15,9 @@ These are the available methods:
 - [add_session_attribute](#add_session_attribute)
 - [list_user_attributes](list_user_attributes)
 - [get_user_attribute](#get_user_attribute)
-- [add_user_attribute](add_user_attribute)
-- list_response_card_buttons
-- add_response_card_button
+- [add_user_attribute](#add_user_attribute)
+- [list_response_card_buttons](#list_response_card_buttons)
+- [add_response_card_button](#add_response_card_button)
 - get_response_card_imageurl
 - set_response_card_imageurl
 - set_response_card_title
@@ -343,7 +343,7 @@ This function returns a list of buttons attached to the answer
 
 ### Return Type
 
-list of object
+list of objects
 
 ### Returns
 
@@ -359,4 +359,26 @@ list of object
     }
 ]
 ```
+
+## add_response_card_button
+
+QnABot uses [Response Cards](https://aws.amazon.com/blogs/machine-learning/creating-a-question-and-answer-bot-with-amazon-lex-and-amazon-alexa/#buttons) to add buttons to answers.
+
+This function adds a button to a response card.  If the response card doesn't exist, the function creates one.
+
+### Request Syntax
+
+```add_response_card_button(event, text, value, isQID = false, prepend = false)```
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+- text - (string) the text displayed on the button
+- value - (string) the value of the button
+- isQID - (boolean) - if true, QnABot will search for a question based on the QID specified by ```value```. If it is false, a button press will simulate the user asking the question specified by ```value```
+- prepend - (boolean) - if true, the button will be added to the beginning of the list of buttons.  If false, the button will be added to the end.
+
+### Return Type
+
+n/a
 
