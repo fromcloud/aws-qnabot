@@ -12,9 +12,28 @@ module.exports = {
         return _.get(event, "req._fulfillment.step")
     },
 
-    get_userInfo_property: function (event, property, default_value = undefined) {
+    get_user_attribute: function (event, property, default_value = undefined) {
         return _.get(event, "res._userInfo." + property, default_value)
     },
+
+
+    list_user_attributes: function(event){
+        //Session attributes may have been added to the response object in addition to what are in
+        //the request object or they may have not been copied to the response on
+        let requestAttributes = _.get(event,"req._userInfo",{})
+        let responseAttributes = _.get(event,"res._userInfo",{})
+        let attributes = Object.assign(requestAttributes,responseAttributes) //Merge request and response attributes
+
+        return attributes
+    },
+
+    add_user_attribute: function(event,key,value){
+        let attributes = this._session_attributes(event)
+        attributes[key] = value
+        _.set(event,"res.session."+key,value)
+    },
+
+
 
     list_settings: function (event) {
         return _.get(event, "req._settings", {})
@@ -38,6 +57,50 @@ module.exports = {
 
     },
 
+    get_message: function (event) {
+        return {
+            plainText: _.get(event, "res.a"),
+            markDown: _.get(event, "alt.markdown"),
+            ssml: _.get(event, "alt.ssml"),
+        }
+    },
+
+    set_message: function (event, message) {
+        _.set(event, "res,a", message.plainText != undefined ? message.plainText : _.get(event, "res.a")),
+        _.set(event, "res.markdown", message.markdown != undefined ? message.markdown : _.get(event, "res.markdown"))
+        _.set(event, "res.ssml", message.ssml != undefined ? message.ssml : _.get(event, "res.ssml"))
+
+    },
+
+
+    get_es_result: function (event) {
+        return _.get(event, "res.result")
+    },
+
+    get_result: function(event){
+        return _.get(event,"res.result")
+    },
+
+    get_answer_source: function(event){
+        return _.get(event,"res.answerSource")
+    },
+
+    list_session_attributes: function(event){
+        //UserInfo attributes may have been added to the response object in addition to what are in
+        //the request object or they may have not been copied to the response object yet
+        let requestAttributes = _.get(event,"req.session",{})
+        let responseAttributes = _.get(event,"res.session",{})
+        let attributes = Object.assign(requestAttributes,responseAttributes) //Merge request and response attributes
+        return attributes
+    },
+
+    add_session_attribute: function(event,key,value){
+        let attributes = this.list_session_attributes(event)
+        attributes[key] = value
+        _.set(event,"res.UserInfo."+key,value)
+    },
+
+
     add_response_card_button: function (event, text, value, isQID = false, prepend = false) {
         let buttons = _.get(event, "res.card.buttons", undefined)
         if (buttons === undefined) {
@@ -56,6 +119,27 @@ module.exports = {
             });
         }
     },
+
+    get_lex_event: function(event){
+        return _.get(event,"req._event")
+    },
+
+    get_bot:function(event){
+        return _.get(event,"bot")
+    },
+
+    get_question:function(event){
+        return _.get(event,"req.question")
+    },
+
+    get_sentiment:function(event){
+        return {
+            sentiment:_.get(event,"req.sentiment"),
+            score: _.get(event,"req.sentimenScore")
+        }
+    }
+
+
 
     set_response_card_imageurl: function (event, url) {
         _.set(event, "res.card.imageUrl", url)

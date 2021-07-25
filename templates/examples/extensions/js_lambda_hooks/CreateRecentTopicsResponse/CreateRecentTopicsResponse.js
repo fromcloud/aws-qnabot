@@ -3,7 +3,7 @@ const hook = require("/opt/lib/hook")
 
 exports.handler = async function (event, context) {
   let step = hook.get_step(event)
-  let topics = hook.get_userInfo_property(event, "recentTopics", [])
+  let topics = hook.list_user_attributes(event, "recentTopics", [])
   if (step == "postprocess") {
     if (topics.length == 0) {
       let recentTopicButton = hook.get_setting(event, "RECENT_TOPICS_BUTTON_VALUE")
@@ -45,7 +45,7 @@ exports.handler = async function (event, context) {
   //Retrieve the "recent topics" from the userInfo object.  
   //All properties stored in the DynamoDB table for a user will be part
   //of the res._userInfo object
-  var userTopics = hook.get_userInfo_property(event, "recentTopics", []).sort((t1, t2) => {
+  var userTopics = hook.get_user_attribute(event, "recentTopics", []).sort((t1, t2) => {
     if (t1.dateTime == t2.dateTime) {
       return 0;
     }
