@@ -77,9 +77,7 @@ module.exports = {
         return _.get(event, "res.result")
     },
 
-    get_result: function(event){
-        return _.get(event,"res.result")
-    },
+ 
 
     get_answer_source: function(event){
         return _.get(event,"res.answerSource")

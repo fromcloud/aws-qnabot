@@ -20,13 +20,12 @@ These are the available methods:
 - [add_response_card_button](#add_response_card_button)
 - [get_response_card_imageurl](#set_response_card_imageurl)
 - [set_response_card_imageurl](#set_response_card_imageurl)
-- set_response_card_title
+- [set_response_card_title](#set_response_card_title)
 - [get_message](#get_message)
 - [set_message](#set_message)
-- get_es_result
-- get_answer_source
-- get_question
-- get_result
+- [get_es_result](#get_es_result)
+- [get_answer_source](#get_answer_source)
+- [get_question](#get_question)
 - validate_response
 
 ## get_step
@@ -481,3 +480,122 @@ This function sets the message that will be returned to the user.
 ### Return Type
 
 na 
+
+## set_response_card_title
+
+Sets the title of the response card.  The title is a required property on a response card.  But it usually is not displayed.  ```add_response_card_button()``` will automatically create a response card if one hasn't already been created. But will modify an existing card if one has been created.
+
+
+
+### Request Syntax
+
+```set_response_card_title(event, title, overwrrite = true)```
+
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+- title - (string) the title to use for the response card
+- overwrite - (boolean) if set to ```true``` overwrite the existing title, otherwise do not overwrite the existing title.
+
+### Return Type
+
+NA
+
+## get_es_result
+
+Returns the response retrieved from the ElasticSearch query.
+
+### Request Syntax
+
+```get_es_result(event)```
+
+### Parameters
+
+event - the Lambda event passed to the handler
+
+### Return Type
+
+object
+
+### Returns
+
+```
+{
+            "qid": string,
+            "a": string,
+            "clientFilterValues": string,
+            "type": string,
+            "questions": object ,
+            "quniqueterms": string,
+            "answersource": string,
+            "autotranslate": object,
+
+}
+```
+
+Where:
+
+- qid - the unique ID for the question
+- a - the plain text answer
+- clientFilterValues - comma separate list of client filters (TODO: Add link to the documentation)
+- question - list of question objects
+  - q - (string) the question entered in the content designer
+- autoTranslate - Autotranslation enabled by default.. will be disabled when handlebars finds explicit language match block.
+
+## get_answer_source
+
+Returns the source where QnABot retrieved the answer to the user's question.
+
+
+### Request Syntax
+
+```get_answer_source(event)```
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+
+### Return Type
+
+string - ElasticSearch | KENDRA_FAQ | KENDRA_FALLBACK 
+
+## get_question
+
+Returns the question asked by the user.
+
+### Request Syntax
+
+```get_question(event)```
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+
+### Return Type
+
+string - the question asked by the user
+
+## validate_response
+
+Validates that the response being sent back to QnABot has all of the required fields. 
+
+If all of the fields are valid, it returns the event.  If not, it throws an exception
+
+
+### Request Syntax
+
+```validate_response(event)```
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+
+### Return type 
+
+object
+
+### Returns
+
+If valid, returns ```event```.  Otherwise throws an exception.
+
