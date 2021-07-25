@@ -18,11 +18,11 @@ These are the available methods:
 - [add_user_attribute](#add_user_attribute)
 - [list_response_card_buttons](#list_response_card_buttons)
 - [add_response_card_button](#add_response_card_button)
-- get_response_card_imageurl
-- set_response_card_imageurl
+- [get_response_card_imageurl](#set_response_card_imageurl)
+- [set_response_card_imageurl](#set_response_card_imageurl)
 - set_response_card_title
-- get_message
-- set_message
+- [get_message](#get_message)
+- [set_message](#set_message)
 - get_es_result
 - get_answer_source
 - get_question
@@ -382,3 +382,102 @@ This function adds a button to a response card.  If the response card doesn't ex
 
 n/a
 
+## get_response_card_imageurl
+
+QnABot can [display images with an answer](https://aws.amazon.com/blogs/machine-learning/creating-a-question-and-answer-bot-with-amazon-lex-and-amazon-alexa/#adding-images) using response cards.
+
+This function returns the URL of the imagge
+
+### Request Syntax
+
+```get_response_card_imageurl(event)```
+
+### Parameters
+
+event - the Lambda event passed to the handler
+
+### Return Type
+
+string - the url of the image
+
+## set_response_card_imageurl
+
+QnABot can [display images with an answer](https://aws.amazon.com/blogs/machine-learning/creating-a-question-and-answer-bot-with-amazon-lex-and-amazon-alexa/#adding-images) using response cards.
+
+This function sets the URL of the image.  A response card must either have an image url, buttons, or both.
+
+### Request Syntax
+
+```set_response_card_imageurl(event,imageurl)```
+
+### Parameters
+
+event - the Lambda event passed to the handler
+imageUrl - text
+
+### Return Type
+
+na 
+
+## get_message
+
+Returns all of the  message formats that can be sent back to user.
+
+
+### Request Syntax
+
+```get_message(event)```
+
+### Parameters
+
+event - the Lambda event passed to the handler
+
+### Return Type
+
+object
+
+### Returns
+
+```
+{
+    plainText: string
+    markDown: string 
+    ssml: string
+}
+```
+
+- plaintext - the plaintext version of the message, if no other appropriate format is specified. This will be returned as the answer
+- markDown - [Markdown](https://www.markdownguide.org/) formatted text.  It will be converted to HTML when sent to the user.
+- ssml - [Speech Synthesis Markup Language](https://www.w3.org/TR/speech-synthesis11/) sent when QnABot is used with a voice capable channel like [Alexa devices](https://www.amazon.com/smart-home-devices/b?ie=UTF8&node=9818047011) or [Amazon Connect](https://aws.amazon.com/connect/)
+
+
+## set_message
+
+This function sets the message that will be returned to the user.
+
+### Request Syntax
+
+```set_message(event,message)```
+
+
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+- message:
+
+```
+{
+    plainText: string,
+    markDown: string,
+    ssml: string
+}
+```
+- plaintext - the plaintext version of the message, if no other appropriate format is specified. This will be returned as the answer
+- markDown - [Markdown](https://www.markdownguide.org/) formatted text.  It will be converted to HTML when sent to the user.
+- ssml - [Speech Synthesis Markup Language](https://www.w3.org/TR/speech-synthesis11/) sent when QnABot is used with a voice capable channel like [Alexa devices](https://www.amazon.com/smart-home-devices/b?ie=UTF8&node=9818047011) or [Amazon Connect](https://aws.amazon.com/connect/)
+
+
+### Return Type
+
+na 

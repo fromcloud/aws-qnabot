@@ -67,7 +67,7 @@ module.exports = {
 
     set_message: function (event, message) {
         _.set(event, "res,a", message.plainText != undefined ? message.plainText : _.get(event, "res.a")),
-        _.set(event, "res.markdown", message.markdown != undefined ? message.markdown : _.get(event, "res.markdown"))
+        _.set(event, "res.markdown", message.markDown != undefined ? message.markDown : _.get(event, "res.markdown"))
         _.set(event, "res.ssml", message.ssml != undefined ? message.ssml : _.get(event, "res.ssml"))
 
     },
