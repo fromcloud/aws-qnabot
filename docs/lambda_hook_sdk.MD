@@ -9,7 +9,7 @@ These are the available methods:
 - [get_lex_event](#get_lex_event)
 - [get_bot](#get_bot)
 - [list_settings](#list_settings)
-- [get_setting](#get_setting)
+- [get_setting](#get_settings)
 - [get_sentiment](#get_sentiment)
 - [list_session_attributes](#get_session_attributes)
 - [add_session_attribute](#add_session_attribute)
