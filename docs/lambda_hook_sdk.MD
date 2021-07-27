@@ -222,14 +222,14 @@ object
 
 See [here](https://docs.aws.amazon.com/comprehend/latest/dg/API_DetectSentiment.html)
 
-## get_session_attributes
+## list_session_attributes
 
 Returns the [Lex Session Attributes](https://docs.aws.amazon.com/connect/latest/adminguide/how-to-use-session-attributes.html). Depending on where the Lambda is called in the process,
 the session attributes may be in the request or response.  This returns attributes in the request merged with the attributes in the response object.  The attributes in the response take precedence in the case of a conflict.
 
 ### Request Syntax
 
-```get_sentiment(event)```
+```list_session_attributes(event)```
 
 ### Parameters
 
@@ -250,8 +250,6 @@ object
     ....
 }
 ```
-
-See [here](https://docs.aws.amazon.com/comprehend/latest/dg/API_DetectSentiment.html) for more information.
 
 ## add_session_attribute
 
