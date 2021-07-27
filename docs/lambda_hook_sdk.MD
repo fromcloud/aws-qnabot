@@ -7,16 +7,16 @@ These are the available methods:
 - [get_lex_event](#get_lex_event)
 - [get_bot](#get_bot)
 - [list_settings](#list_settings)
-- [get_setting](#get_setting)
+- [get_setting](#get_settings)
 - [get_sentiment](#get_sentiment)
-- [list_session_attributes](#get_session_attributes)
+- [list_session_attributes](#list_session_attributes)
 - [add_session_attribute](#add_session_attribute)
-- [list_user_attributes](list_user_attributes)
+- [list_user_attributes](#list_user_attributes)
 - [get_user_attribute](#get_user_attribute)
 - [add_user_attribute](#add_user_attribute)
 - [list_response_card_buttons](#list_response_card_buttons)
 - [add_response_card_button](#add_response_card_button)
-- [get_response_card_imageurl](#set_response_card_imageurl)
+- [get_response_card_imageurl](#get_response_card_imageurl)
 - [set_response_card_imageurl](#set_response_card_imageurl)
 - [set_response_card_title](#set_response_card_title)
 - [get_message](#get_message)
@@ -218,14 +218,14 @@ object
 
 See [here](https://docs.aws.amazon.com/comprehend/latest/dg/API_DetectSentiment.html)
 
-## get_session_attributes
+## list_session_attributes
 
 Returns the [Lex Session Attributes](https://docs.aws.amazon.com/connect/latest/adminguide/how-to-use-session-attributes.html). Depending on where the Lambda is called in the process,
 the session attributes may be in the request or response.  This returns attributes in the request merged with the attributes in the response object.  The attributes in the response take precedence in the case of a conflict.
 
 ### Request Syntax
 
-```get_sentiment(event)```
+```list_session_attributes(event)```
 
 ### Parameters
 
@@ -246,8 +246,6 @@ object
     ....
 }
 ```
-
-See [here](https://docs.aws.amazon.com/comprehend/latest/dg/API_DetectSentiment.html) for more information.
 
 ## add_session_attribute
 
@@ -300,6 +298,25 @@ object
 ```
 
 If the user is logged in, more information is available such as the user name, email address, and first and last name.
+
+## get_user_attribute
+
+Returns a user attribute.
+
+
+### Request Syntax
+
+```get_user_attribute(event,property,default_value)```
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+- property - the property to retrieve
+- default_value - if a setting is not found, return this value 
+
+### Return Type
+
+string
 
 ## add_user_attribute
 
