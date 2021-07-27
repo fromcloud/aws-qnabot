@@ -1,5 +1,3 @@
-
-
 # Methods
 
 These are the available methods:
@@ -26,7 +24,7 @@ These are the available methods:
 - [get_es_result](#get_es_result)
 - [get_answer_source](#get_answer_source)
 - [get_question](#get_question)
-- validate_response
+- [validate_response](#validate_response)
 
 ## get_step
 
@@ -38,7 +36,7 @@ A Lambda hook can be called as the first step in the fulfillment pipeline (PREPR
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -47,7 +45,6 @@ string
 ### Returns
 
 ```PREPROCESS | POSTPROCESS | HOOK```
-
 
 ## get_args
 
@@ -59,13 +56,12 @@ Returns the arguments specified in the Content Designer when a Lambda is called 
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- -event - the Lambda event passed to the handler
 
 ### Return Type
 
 object or string - if the argument specified in Content Designer is valid JSON, it is deserialized and
 returned as an object.  Otherwise, a string is returned.
-
 
 ## get_lex_event
 
@@ -77,7 +73,7 @@ Returns the event object received from the Amazon Lex service.
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -98,7 +94,7 @@ Returns the arguments specified in the Content Designer when a Lambda is called 
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -106,7 +102,7 @@ object
 
 ### Returns
 
-```
+```json
 "bot": {
     "aliasId": "xxxxx",
     "aliasName": "live",
@@ -127,7 +123,7 @@ Returns the arguments specified in the Content Designer when a Lambda is called 
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -135,7 +131,7 @@ object
 
 ### Returns
 
-```
+```json
 "bot": {
     "aliasId": "xxxxx",
     "aliasName": "live",
@@ -156,7 +152,7 @@ Returns the user's current settings
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -164,7 +160,7 @@ object
 
 ### Returns
 
-```
+```json
 {
 "ENABLE_DEBUG_RESPONSES": false,
 "ES_USE_KEYWORD_FILTERS": true,
@@ -209,7 +205,7 @@ object
 
 ### Returns
 
-```
+```json
 {
     "sentiment": "POSITIVE" | "NEUTRAL" | "MIXED" | "NEGATIVE"
     "sentimentScore": {
@@ -241,7 +237,7 @@ object
 
 ### Returns
 
-```
+```json
 {
     "qnabotcontext": "...",
     "appContext": "...",
@@ -267,7 +263,6 @@ Adds a session attribute to the response object that will be returned to the cli
 - key - the name of the attribute
 - value - the value of the attribute
 
-
 ### Return Type
 
 n/a
@@ -276,7 +271,7 @@ See [here](https://docs.aws.amazon.com/comprehend/latest/dg/API_DetectSentiment.
 
 ## list_user_attributes
 
-Returns the user attributes that are stored in DynamoDB per user. If the user is logged in, the session is permanently associated with the user across devices.  If the user is not logged in, the session is saved based on a temporary ID assigned by QnABot's [Identity Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html) 
+Returns the user attributes that are stored in DynamoDB per user. If the user is logged in, the session is permanently associated with the user across devices.  If the user is not logged in, the session is saved based on a temporary ID assigned by QnABot's [Identity Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html)
 
 Depending on where the Lambda is called in the process, the session attributes may be in the request or response.  This returns attributes in the request merged with the attributes in the response object.  The attributes in the response take precedence in the case of a conflict.
 
@@ -294,7 +289,7 @@ object
 
 ### Returns
 
-```
+```json
  {
     "UserId": "xxxx",
     "InteractionCount": integer,
@@ -304,12 +299,11 @@ object
 }
 ```
 
-If the user is logged in, more information is available such as the user name, email address, and first and last name. 
+If the user is logged in, more information is available such as the user name, email address, and first and last name.
 
 ## add_user_attribute
 
 Adds a user attribute to the response object that will be stored in DynamoDB. These properties will *not* be returned to the client. But they are available to both the processing pipeline and can be used as part of HandleBars processing.
-
 
 ### Request Syntax
 
@@ -320,7 +314,6 @@ Adds a user attribute to the response object that will be stored in DynamoDB. Th
 - event - the Lambda event passed to the handler
 - key - the name of the attribute
 - value - the value of the attribute
-
 
 ### Return Type
 
@@ -346,7 +339,7 @@ list of objects
 
 ### Returns
 
-```
+```json
 [
     {
         text: "button1 text",
@@ -385,7 +378,7 @@ n/a
 
 QnABot can [display images with an answer](https://aws.amazon.com/blogs/machine-learning/creating-a-question-and-answer-bot-with-amazon-lex-and-amazon-alexa/#adding-images) using response cards.
 
-This function returns the URL of the imagge
+This function returns the URL of the image
 
 ### Request Syntax
 
@@ -393,7 +386,7 @@ This function returns the URL of the imagge
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -411,17 +404,16 @@ This function sets the URL of the image.  A response card must either have an im
 
 ### Parameters
 
-event - the Lambda event passed to the handler
-imageUrl - text
+- event - the Lambda event passed to the handler
+- imageUrl - text
 
 ### Return Type
 
-na 
+na
 
 ## get_message
 
 Returns all of the  message formats that can be sent back to user.
-
 
 ### Request Syntax
 
@@ -429,7 +421,7 @@ Returns all of the  message formats that can be sent back to user.
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -437,7 +429,7 @@ object
 
 ### Returns
 
-```
+```json
 {
     plainText: string
     markDown: string 
@@ -449,7 +441,6 @@ object
 - markDown - [Markdown](https://www.markdownguide.org/) formatted text.  It will be converted to HTML when sent to the user.
 - ssml - [Speech Synthesis Markup Language](https://www.w3.org/TR/speech-synthesis11/) sent when QnABot is used with a voice capable channel like [Alexa devices](https://www.amazon.com/smart-home-devices/b?ie=UTF8&node=9818047011) or [Amazon Connect](https://aws.amazon.com/connect/)
 
-
 ## set_message
 
 This function sets the message that will be returned to the user.
@@ -458,39 +449,34 @@ This function sets the message that will be returned to the user.
 
 ```set_message(event,message)```
 
-
-
 ### Parameters
 
 - event - the Lambda event passed to the handler
 - message:
 
-```
+```javascript
 {
     plainText: string,
     markDown: string,
     ssml: string
 }
 ```
+
 - plaintext - the plaintext version of the message, if no other appropriate format is specified. This will be returned as the answer
 - markDown - [Markdown](https://www.markdownguide.org/) formatted text.  It will be converted to HTML when sent to the user.
 - ssml - [Speech Synthesis Markup Language](https://www.w3.org/TR/speech-synthesis11/) sent when QnABot is used with a voice capable channel like [Alexa devices](https://www.amazon.com/smart-home-devices/b?ie=UTF8&node=9818047011) or [Amazon Connect](https://aws.amazon.com/connect/)
 
-
 ### Return Type
 
-na 
+na
 
 ## set_response_card_title
 
 Sets the title of the response card.  The title is a required property on a response card.  But it usually is not displayed.  ```add_response_card_button()``` will automatically create a response card if one hasn't already been created. But will modify an existing card if one has been created.
 
-
-
 ### Request Syntax
 
 ```set_response_card_title(event, title, overwrrite = true)```
-
 
 ### Parameters
 
@@ -512,7 +498,7 @@ Returns the response retrieved from the ElasticSearch query.
 
 ### Parameters
 
-event - the Lambda event passed to the handler
+- event - the Lambda event passed to the handler
 
 ### Return Type
 
@@ -520,7 +506,7 @@ object
 
 ### Returns
 
-```
+```javascript
 {
             "qid": string,
             "a": string,
@@ -547,7 +533,6 @@ Where:
 
 Returns the source where QnABot retrieved the answer to the user's question.
 
-
 ### Request Syntax
 
 ```get_answer_source(event)```
@@ -558,7 +543,7 @@ Returns the source where QnABot retrieved the answer to the user's question.
 
 ### Return Type
 
-string - ElasticSearch | KENDRA_FAQ | KENDRA_FALLBACK 
+string - ElasticSearch | KENDRA_FAQ | KENDRA_FALLBACK
 
 ## get_question
 
@@ -578,10 +563,9 @@ string - the question asked by the user
 
 ## validate_response
 
-Validates that the response being sent back to QnABot has all of the required fields. 
+Validates that the response being sent back to QnABot has all of the required fields.
 
 If all of the fields are valid, it returns the event.  If not, it throws an exception
-
 
 ### Request Syntax
 
@@ -591,11 +575,10 @@ If all of the fields are valid, it returns the event.  If not, it throws an exce
 
 - event - the Lambda event passed to the handler
 
-### Return type 
+### Return type
 
 object
 
 ### Returns
 
 If valid, returns ```event```.  Otherwise throws an exception.
-

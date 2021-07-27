@@ -59,16 +59,16 @@ module.exports = {
 
     get_message: function (event) {
         return {
-            plainText: _.get(event, "res.a"),
-            markDown: _.get(event, "alt.markdown"),
-            ssml: _.get(event, "alt.ssml"),
+            plainText: _.get(event, "res.result.a"),
+            markDown: _.get(event, "res.result.alt.markdown"),
+            ssml: _.get(event, "res.result.alt.ssml"),
         }
     },
 
     set_message: function (event, message) {
-        _.set(event, "res,a", message.plainText != undefined ? message.plainText : _.get(event, "res.a")),
-        _.set(event, "res.markdown", message.markDown != undefined ? message.markDown : _.get(event, "res.markdown"))
-        _.set(event, "res.ssml", message.ssml != undefined ? message.ssml : _.get(event, "res.ssml"))
+        _.set(event, "res,result.a", message.plainText != undefined ? message.plainText : _.get(event, "res.a")),
+        _.set(event, "res.result.alt.markdown", message.markDown != undefined ? message.markDown : _.get(event, "res.markdown"))
+        _.set(event, "res.result.alt.ssml", message.ssml != undefined ? message.ssml : _.get(event, "res.ssml"))
 
     },
 
@@ -80,7 +80,7 @@ module.exports = {
  
 
     get_answer_source: function(event){
-        return _.get(event,"res.answerSource")
+        return _.get(event,"res.result.answerSource")
     },
 
     list_session_attributes: function(event){
@@ -123,7 +123,7 @@ module.exports = {
     },
 
     get_bot:function(event){
-        return _.get(event,"bot")
+        return _.get(event,"req._event.bot")
     },
 
     get_question:function(event){
@@ -135,9 +135,7 @@ module.exports = {
             sentiment:_.get(event,"req.sentiment"),
             score: _.get(event,"req.sentimenScore")
         }
-    }
-
-
+    },
 
     set_response_card_imageurl: function (event, url) {
         _.set(event, "res.card.imageUrl", url)
