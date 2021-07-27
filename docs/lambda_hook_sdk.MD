@@ -18,7 +18,7 @@ These are the available methods:
 - [add_user_attribute](#add_user_attribute)
 - [list_response_card_buttons](#list_response_card_buttons)
 - [add_response_card_button](#add_response_card_button)
-- [get_response_card_imageurl](#set_response_card_imageurl)
+- [get_response_card_imageurl](#get_response_card_imageurl)
 - [set_response_card_imageurl](#set_response_card_imageurl)
 - [set_response_card_title](#set_response_card_title)
 - [get_message](#get_message)
