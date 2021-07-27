@@ -11,7 +11,7 @@ These are the available methods:
 - [list_settings](#list_settings)
 - [get_setting](#get_settings)
 - [get_sentiment](#get_sentiment)
-- [list_session_attributes](#get_session_attributes)
+- [list_session_attributes](#list_session_attributes)
 - [add_session_attribute](#add_session_attribute)
 - [list_user_attributes](list_user_attributes)
 - [get_user_attribute](#get_user_attribute)
