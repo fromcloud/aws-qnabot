@@ -1,6 +1,5 @@
 const hooks = require("./hooks")
 const _ = require("lodash");
-const { ServiceCatalog } = require("aws-sdk");
 
 
 const srcEvent = {
@@ -229,7 +228,7 @@ const srcEvent = {
                     "value": "QID::Office.Dental"
                 },
                 {
-                    "text": "Swanson School of Engineering",
+                    "text": "School of Engineering",
                     "value": "QID::Office.Engineering"
                 }
             ]
@@ -247,7 +246,6 @@ const srcEvent = {
         "got_hits": 1,
         "result": {
             "qid": "client2.1",
-            "args":"{ \"test1\":\"A\",\"test2\":\"B\",\"test3\":\"C\"}",
             "a": "this is the client2 answer",
             "clientFilterValues": "client2",
             "type": "qna",
@@ -264,7 +262,7 @@ const srcEvent = {
             },
             "rp": "Please either answer the question, ask another question or say Goodbye to end the conversation.",
             "l": "",
-            "args": []
+            "args": ["{ \"test1\":\"A\",\"test2\":\"B\",\"test3\":\"C\"}","string test"]
         },
         "plainMessage": "this is the client2 answer",
         "answerSource": "ELASTICSEARCH",
@@ -556,12 +554,13 @@ describe("Lambda hooks tests",() => {
     
     test("get_args",() => {
         let result = hooks.get_args(srcEvent)
-        expect(result).toBe(
+        console.log(result)
+        expect(result).toStrictEqual([
             {
                 "test1":"A",
                 "test2":"B",
                 "test3":"C"
-              }
+            },"string test"]
         )
     })
 
@@ -634,5 +633,103 @@ describe("Lambda hooks tests",() => {
         expect(result).toBe(_.get(srcEvent, "req.question"))
     })
 
-})
+    test("add_session_attribute",() => {
+        let event = _.cloneDeep(srcEvent)
+        let expected = _.cloneDeep(srcEvent)
 
+        let actual = hooks.add_session_attribute(event,"unit-test","this value")
+        expected = _.get(expected,"res.session")
+        expected["unit-test"] = "this value"
+        
+        expect(expected).toStrictEqual(actual)
+
+    })
+
+    test("add_user_attribute",() => {
+        let event = _.cloneDeep(srcEvent)
+        let expected = _.cloneDeep(srcEvent)
+
+        let actual = hooks.add_user_attribute(event,"unit-test","this value")
+        expected = _.get(expected,"res._userInfo")
+        expected["unit-test"] = "this value"
+        
+        expect(expected).toStrictEqual(actual)
+
+    })
+
+    test("add_response_card_button should add value without a QID and append button",() => {
+        let event = _.cloneDeep(srcEvent)
+        let expected = _.cloneDeep(srcEvent)
+
+        let actual = hooks.add_response_card_button(event,"unit-test","this value")
+        expected = _.get(expected,"res.card.buttons",[])
+        expected.push({
+            text: "unit-test",
+            value: "this value"
+        })
+        
+        expect(expected).toStrictEqual(actual)
+
+    })
+
+    test("add_response_card_button should add value without a QID prepend button",() => {
+        let event = _.cloneDeep(srcEvent)
+        let expected = _.cloneDeep(srcEvent)
+
+        let actual = hooks.add_response_card_button(event,"unit-test","this value",false,true)
+        expected = _.get(expected,"res.card.buttons",[])
+        expected.unshift({
+            text: "unit-test",
+            value: "this value"
+        })
+        
+        expect(expected).toStrictEqual(actual)
+
+    })
+
+    test("add_response_card_button should add value with a QID prepend button",() => {
+        let event = _.cloneDeep(srcEvent)
+        let expected = _.cloneDeep(srcEvent)
+
+        let actual = hooks.add_response_card_button(event,"unit-test","A.Question",true,true)
+        expected = _.get(expected,"res.card.buttons",[])
+        expected.unshift({
+            text: "unit-test",
+            value: "qid::A.Question"
+        })
+        
+        expect(expected).toStrictEqual(actual)
+
+    })
+
+    test("set_response_card_title should overwrite if present",() => {
+        let event = _.cloneDeep(srcEvent)
+        _.set(event, "res.card.title", "original title")
+        let expected = _.cloneDeep(srcEvent)
+
+        let actual = hooks.set_response_card_title(event,"This is a test title.")
+        expected = _.get(event, "res.card.title")
+
+        
+        expect(expected).toStrictEqual(actual)
+        expect(expected).toBe("This is a test title.")
+
+    })
+
+
+    test("set_response_card_title should overwrite if present",() => {
+        let event = _.cloneDeep(srcEvent)
+        let expected = _.cloneDeep(srcEvent)
+        _.set(expected, "res.card.title", "original title")
+
+
+        let actual = hooks.set_response_card_title(expected,"This is a test title.",false)
+        expected = _.get(expected, "res.card.title")
+
+        
+        expect(expected).toStrictEqual(actual)
+        expect(expected).toBe("original title")
+
+    })
+
+})

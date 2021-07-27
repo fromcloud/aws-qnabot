@@ -253,7 +253,7 @@ Adds a session attribute to the response object that will be returned to the cli
 
 ### Request Syntax
 
-```get_sentiment(event,key,value)```
+```add_session_attribute(event,key,value)```
 
 ### Parameters
 
@@ -263,7 +263,35 @@ Adds a session attribute to the response object that will be returned to the cli
 
 ### Return Type
 
-n/a
+object
+
+### Returns
+
+An object containing the session attributes
+
+```javascript
+{
+    "qnabot_qid": "client2.1",
+    "qnabot_gotanswer": true,
+    "qnabotcontext": {
+        "previous": {
+            "qid": "client2.1",
+            "q": "What is the client answer"
+        },
+        "navigation": {
+            "next": "",
+            "previous": [],
+            "hasParent": true
+        }
+    },
+    "QNAClientFilter": "client2",
+    "appContext": {
+        "altMessages": {}
+    }
+    ...
+}
+```
+
 
 See [here](https://docs.aws.amazon.com/comprehend/latest/dg/API_DetectSentiment.html) for more information.
 
@@ -324,7 +352,7 @@ Adds a user attribute to the response object that will be stored in DynamoDB. Th
 
 ### Request Syntax
 
-```get_sentiment(event,key,value)```
+```add_user_attribute(event,key,value)```
 
 ### Parameters
 
@@ -334,7 +362,22 @@ Adds a user attribute to the response object that will be stored in DynamoDB. Th
 
 ### Return Type
 
-n/a
+object
+
+### Returns
+
+```javascript
+{
+    "UserId": "test-userid",
+    "InteractionCount": 6,
+    "FirstSeen": "Sat Jul 24 2021 14:08:51 GMT+0000 (Coordinated Universal Time)",
+    "LastSeen": "Sat Jul 24 2021 14:10:01 GMT+0000 (Coordinated Universal Time)",
+    "TimeSinceLastInteraction": 10.182,
+    "recentTopics": [],
+    "isVerifiedIdentity": "false"
+    ...
+}
+```
 
 ## list_response_card_buttons
 
