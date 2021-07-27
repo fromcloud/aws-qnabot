@@ -304,6 +304,25 @@ object
 
 If the user is logged in, more information is available such as the user name, email address, and first and last name. 
 
+## get_user_attribute
+
+Returns a user attribute.
+
+
+### Request Syntax
+
+```get_user_attribute(event,property,default_value)```
+
+### Parameters
+
+- event - the Lambda event passed to the handler
+- property - the property to retrieve
+- default_value - if a setting is not found, return this value 
+
+### Return Type
+
+string
+
 ## add_user_attribute
 
 Adds a user attribute to the response object that will be stored in DynamoDB. These properties will *not* be returned to the client. But they are available to both the processing pipeline and can be used as part of HandleBars processing.
