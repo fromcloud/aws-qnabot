@@ -28,9 +28,10 @@ module.exports = {
     },
 
     add_user_attribute: function(event,key,value){
-        let attributes = this._session_attributes(event)
+        let attributes = this.list_user_attributes(event)
         attributes[key] = value
-        _.set(event,"res.session."+key,value)
+        _.set(event,"res.session.",attributes)
+        return this.list_user_attributes(event)
     },
 
 
@@ -49,12 +50,16 @@ module.exports = {
 
     get_args: function (event) {
         var args = _.get(event, "res.result.args");
-        if (_isJson(args)) {
-            return JSON.parse(args)
-        }
-        else
-            return args
-
+        let results = [];
+        args.forEach(element => {
+            if (_isJson(element)) {
+                results.push(JSON.parse(element))
+            }
+            else{
+                results.push(element)
+            }
+        })
+        return results;
     },
 
     get_message: function (event) {
@@ -95,7 +100,8 @@ module.exports = {
     add_session_attribute: function(event,key,value){
         let attributes = this.list_session_attributes(event)
         attributes[key] = value
-        _.set(event,"res.UserInfo."+key,value)
+        _.set(event,"res.session."+key,value)
+        return this.list_session_attributes(event)
     },
 
 
@@ -116,6 +122,7 @@ module.exports = {
                 value: isQID ? "qid::" + value : value
             });
         }
+        return this.list_response_card_buttons(event)
     },
 
     get_lex_event: function(event){
@@ -150,7 +157,7 @@ module.exports = {
         if (!card || (card && overwrrite)) {
             _.set(event, "res.card.title", title)
         }
-        _.set(event, "res.card.send", true)
+        return _.get(event, "res.card.title")
     },
 
     validate_response: function (event) {
