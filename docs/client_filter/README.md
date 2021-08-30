@@ -36,7 +36,7 @@ Please greet the bot in the QnABot Client with **"Hello!"**. Select **"Let me as
 
 ![Sample Flow 2](./sampleflow2.png)
 
-There are several questions in the **"clientfilterdemo"** bank which do not have a client filter set. These questions have been created to demonstrate the next level of specificity when filtering content in conversation streams. The QnABot Session Attribute must match **"unfiltered"** but the answers aren't specific to a certain service yet. A general question such as "How much does it cost?" can be asked, and further options are presented by the bot to specify a service. In the above example, select **"Kendra"** to get a more refined response from the bot.
+There are several questions in the **"clientfilterdemo"** bank which do not have a client filter set. These questions have been created to demonstrate the next level of specificity when filtering content in conversation streams. A general question such as "How much does it cost?" can be asked, and further options are presented by the bot to specify a service. In the above example, select **"Kendra"** to get a more refined response from the bot.
 
 <!--- TODO: add a note here about QID bubbles -->
 
