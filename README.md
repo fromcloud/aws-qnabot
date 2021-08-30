@@ -77,6 +77,8 @@ Click a button to launch QnABot CloudFormation stack in the desired region
 
 ### Clone the git repo and build a version
 
+(Optionally, you can deploy QnABot from a [properly configured Cloud 9 environment](./docs/using_cloud9/README.md))
+
 First, install all prerequisites:
 
 ```shell
