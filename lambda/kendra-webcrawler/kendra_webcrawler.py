@@ -35,16 +35,16 @@ def create_cron_expression(schedule):
     cron[4] = calendar.day_name[datetime.datetime.today().weekday()][0:3].upper()
     cron[5] = "*"
 
-    if unit in ["day", "days","daily"]:
+    if unit in ["day", "days", "daily"]:
         cron[2] = "*"
         cron[3] = "*"
         cron[4] = "?"
 
-    if unit in ["week", "weeks","weekly"]:
+    if unit in ["week", "weeks", "weekly"]:
         cron[2] = "?"
         cron[3] = "*"
 
-    if unit in ["month", "months","monthly"]:
+    if unit in ["month", "months", "monthly"]:
         cron[3] = "*"
         cron[4] = "?"
 

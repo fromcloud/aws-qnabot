@@ -566,19 +566,44 @@ module.exports = Object.assign(
       },
     },
 
-    // ParameterChangeRuleKendraCrawlerPermission: {
-    //   Type: "AWS::Lambda::Permission",
-    //   Properties: {
-    //     FunctionName: {
-    //       "Fn::GetAtt": ["KendraCrawlerCWRuleUpdaterLambda", "Arn"],
-    //     },
-    //     Action: "lambda:InvokeFunction",
-    //     Principal: "events.amazonaws.com",
-    //     SourceArn: {
-    //       "Fn::GetAtt": ["CloudWatchEventRule", "Arn"],
-    //     },
-    //   },
-    // },
+    ParameterChangeRuleKendraCrawlerPermission: {
+      Type: "AWS::Lambda::Permission",
+      Properties: {
+        FunctionName: {
+          "Fn::GetAtt": ["KendraNativeCrawlerScheduleUpdateLambda", "Arn"],
+        },
+        Action: "lambda:InvokeFunction",
+        Principal: "events.amazonaws.com",
+        SourceArn: {
+          "Fn::GetAtt": ["CloudWatchEventRule", "Arn"],
+        },
+      },
+    },
+    CloudWatchEventRule: {
+      Type: "AWS::Events::Rule",
+      Properties: {
+        Description: "Parameter Setting Change",
+        EventPattern: {
+          source: ["aws.ssm"],
+          "detail-type": ["Parameter Store Change"],
+          detail: {
+            name: [{Ref: "CustomQnABotSettings"}],
+            operation: ["Update"],
+          },
+        },
+        State: "ENABLED",
+        Targets: [
+          //Add Lambda targets here as needed
+          {
+            Arn: {
+              "Fn::GetAtt": ["KendraNativeCrawlerScheduleUpdateLambda", "Arn"],
+            },
+            Id: "KendraCrawler",
+          },
+        ],
+      },
+    },
+    
 
     KendraNativeCrawlerRole: {
       Type: "AWS::IAM::Role",
@@ -806,6 +831,66 @@ module.exports = Object.assign(
         "FunctionName": {"Fn::GetAtt": ["KendraNativeCrawlerStatusLambda", "Arn"]},
         "Principal": "apigateway.amazonaws.com"
       }
+    },
+    "KendraNativeCrawlerScheduleUpdateCodeVersion": {
+      "Type": "Custom::S3Version",
+      "Properties": {
+        "ServiceToken": {"Ref": "CFNLambda"},
+        "Bucket": {"Ref": "BootstrapBucket"},
+        "Key": {"Fn::Sub": "${BootstrapPrefix}/lambda/kendra-webcrawler-schedule-updater.zip"},
+        "BuildDate": (new Date()).toISOString()
+      }
+    },
+    KendraNativeCrawlerScheduleUpdateLambda: {
+      Type: "AWS::Lambda::Function",
+      Properties: {
+        Code: {
+          S3Bucket: {Ref: "BootstrapBucket"},
+          S3Key: {"Fn::Sub": "${BootstrapPrefix}/lambda/kendra-webcrawler-schedule-updater.zip"},
+          S3ObjectVersion: {Ref: "KendraNativeCrawlerScheduleUpdateCodeVersion"},
+        },
+        "VpcConfig": {
+          "Fn::If": ["VPCEnabled", {
+            "SubnetIds": {"Fn::Split": [",", {"Ref": "VPCSubnetIdList"}]},
+            "SecurityGroupIds": {"Fn::Split": [",", {"Ref": "VPCSecurityGroupIdList"}]},
+          }, {"Ref": "AWS::NoValue"}]
+        },
+        "TracingConfig": {
+          "Fn::If": ["XRAYEnabled", {"Mode": "Active"}, {"Ref": "AWS::NoValue"}]
+        },
+        Environment: {
+          Variables: {
+            ROLE_ARN: {"Fn::GetAtt": ["KendraNativeCrawlerPassRole", "Arn"]},
+            DEFAULT_SETTINGS_PARAM: {Ref: "DefaultQnABotSettings"},
+            CUSTOM_SETTINGS_PARAM: {Ref: "CustomQnABotSettings"},
+            DATASOURCE_NAME: {
+              "Fn::Join": [
+                "-",
+                [
+                  "QNABotKendraNativeCrawler",
+                  {
+                    "Fn::Select": [
+                      2,
+                      {"Fn::Split": ["-", {Ref: "DefaultQnABotSettings"}]},
+                    ],
+                  },"v2"
+                ],
+              ],
+            },
+          },
+        },
+        Handler: "kendra_webcrawler_schedule_updater.handler",
+        MemorySize: "2048",
+        Role: {"Fn::GetAtt": ["KendraNativeCrawlerRole", "Arn"]},
+        Runtime: "python3.7",
+        Timeout: 900,
+        Tags: [
+          {
+            Key: "Type",
+            Value: "Export",
+          },
+        ],
+      },
     },
     KendraNativeCrawlerStatusLambda: {
       Type: "AWS::Lambda::Function",
