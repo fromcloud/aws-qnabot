@@ -10,11 +10,11 @@ In the included example question bank, we use client filtering for a user lookin
 
 Choose **Import** from the Tools menu.
 
-![Import Tool](./Import.png =50%x50%)
+![Import Tool](./Import.png)
 
 Expand the dropdown menu under **Examples/Extensions** and load the **ClientFilterDemo** question bank.
 
-![Import question bank](./clientfilterdemobank.png =50%x50%))
+![Import question bank](./clientfilterdemobank.png)
 
 The sample question bank is pre-loaded with questions tagged with client filters.
 
@@ -28,13 +28,13 @@ Please greet the bot in the QnABot Client with **"Hello!"**. Select **"Let me as
 
 You can ask the bot a general question that has **no filter**, such as "What is Alexa?" QnABot will respond to the question as it normally does
 
-![What is Alexa?](./normal_alexa_q.png =50%x50%)
+![What is Alexa?](./normal_alexa_q.png)
 
 ### Sample Flow #2: Questions that have answers with and without a client filter applied
 
 Please greet the bot in the QnABot Client with **"Hello!"**. Select **"Let me ask questions about AWS Services"** to begin.
 
-![Sample Flow 2](./sampleflow2.png =50%x50%)
+![Sample Flow 2](./sampleflow2.png)
 
 There are several questions in the **"clientfilterdemo"** bank which do not have a client filter set. These questions have been created to demonstrate the next level of specificity when filtering content in conversation streams. The QnABot Session Attribute must match **"unfiltered"** but the answers aren't specific to a certain service yet. A general question such as "How much does it cost?" can be asked, and further options are presented by the bot to specify a service. In the above example, select **"Kendra"** to get a more refined response from the bot.
 
