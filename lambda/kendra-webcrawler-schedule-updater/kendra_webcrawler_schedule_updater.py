@@ -54,8 +54,6 @@ def create_cron_expression(schedule):
 def handler(event, context):
     Name = os.environ.get('DATASOURCE_NAME')
     RoleArn = os.environ.get('ROLE_ARN')
-    Type = 'WEBCRAWLER'
-    Description = 'QnABot WebCrawler Index'
 
     settings = get_settings()
     IndexId = settings['KENDRA_WEB_PAGE_INDEX']
@@ -67,20 +65,18 @@ def handler(event, context):
         schedule = ""
         
     data_source_id = get_data_source_id(IndexId, Name)
-
     current_schedule = get_data_source_schedule(IndexId, data_source_id)
 
     schedule_parts = schedule.replace("cron(", "").replace(")", "").split(",")
     current_schedule = schedule.replace("cron(", "").replace(")", "").split(",")
 
-    #The hour and minute are set dynamically.  This is to detect if the schedule changed between DAILY, WEEKLY, MONTHLY
+    # The hour and minute are set dynamically.  This is to detect if the schedule changed between DAILY, WEEKLY, MONTHLY
     if(schedule_parts[2] != current_schedule[2] or
        schedule_parts[3] != current_schedule[3] or
        ((schedule_parts[3] != current_schedule[3]) and (schedule_parts[3] != "?" or current_schedule[3] != "?"))):
 
-        kendra_update_data_source(IndexId, data_source_id, URLS, RoleArn, schedule)
+        kendra_update_data_source(IndexId, data_source_id, URLs, RoleArn, schedule)
 
-    kendra_update_data_source(IndexId, data_source_id, URLs, RoleArn, schedule)
     return {"IndexId": IndexId, "DataSourceId": data_source_id}
 
 
@@ -154,4 +150,3 @@ def create_dashboard(IndexId, data_source_id):
         DashboardBody=dashboard_body
     )
     print(response)
-

@@ -11,24 +11,27 @@ See the "Getting Started" to launch your own QnABot.
 **See all the new features list for 4.7.3** [Fulfillment Lambda Provisioned Concurrency](#new-features)
 
 4.7.3
-  - The QnABot fulfillment Lambda function can now be configured for provisioned concurrency to further improve query 
+
+- The QnABot fulfillment Lambda function can now be configured for provisioned concurrency to further improve query
     response times after periods of inactivity.
   - Bug fix for proper invocation of ESWarmer lambda
   - Bug fix to resolve sporadic API Compression CloudFormation exception
 
 4.7.1 provides performance improvements and component upgrades
-  - Amazon Elasticsearch version 7.10 is now utilized.
-  - Encrypted Elasticsearch (production) instance types now use m6g.large.elasticsearch for improved price/performance/memory. 
-  - The QnABot fulfillment Lambda function has been optimized to reduce query response times and variability, 
-    especially after periods of inactivity. 
-  - LexV2 built-in Elicit Response bots have been added. 
+
+- Amazon Elasticsearch version 7.10 is now utilized.
+  - Encrypted Elasticsearch (production) instance types now use m6g.large.elasticsearch for improved price/performance/memory.
+  - The QnABot fulfillment Lambda function has been optimized to reduce query response times and variability,
+    especially after periods of inactivity.
+  - LexV2 built-in Elicit Response bots have been added.
   - Custom settings can now be exported and imported from the Content Designer Settings page.
   - Bug fix when ES_SCORE_ANSWER_FIELD is set to true. Prior to this fix, answer fields were not
     utilized fully in Elasticsearch queries.
 
 4.7.0 QnABot now supports LexV2 with voice interaction in multiple languages.
-  - Two installation/update modes are now available:
-    - (i) LexV1 + LexV2 (default, recommended for most AWS regions.
+
+- Two installation/update modes are now available:
+  - (i) LexV1 + LexV2 (default, recommended for most AWS regions.
     - (ii) LexV2-only (currently recommended for AWS regions where LexV1 is not available).
   
 4.6.0 provides a number of new features described below. Several to call attention to are the following:
@@ -134,32 +137,45 @@ See the [LICENSE.md](LICENSE.md) file for details
 
 ## New features
 
+### Version 4.7.4
+
+- QnABot now uses the official [Kendra Web Crawler](https://docs.aws.amazon.com/kendra/latest/dg/data-source-web-crawler.html) instead of the built in "web indexer".See the updated [documentation](./docs/kendra_crawler_guide/README.md) for more information.
+- [Client Filtering](./docs/client-filter/README.md) has been added.  This feature allows QnABot to answer the same set of questions differently based on information known about the client
+such as the web page where QnABot is hosted or the type of contact calling in through Connect.
+- New setting - ALT_SEARCH_KENDRA_RESPONSE_TYPES - to allow Kendra responses to be filtered based on [Response Types](https://docs.aws.amazon.com/kendra/latest/dg/response-types.html).
+- New setting - ALT_SEARCH_KENDRA_ABBREVIATE_MESSAGE_FOR_SSML - Kendra will return an abbreviated response when set to "true" when used with a voice channel like Amazon Connect, which is the current behavior.  
+When set to "false", Kendra will return the entire first response.  This setting is best used along with ALT_SEARCH_KENDRA_RESPONSE_TYPES with a setting of "DOCUMENT".
+- New feature - QnABot now supports the concept of "global Lambda hooks".  This allows you specify a Lambda that is called at the beginning (LAMBDA_PREPROCESS_HOOK) of the processing pipeline before the user profile data is loaded and at the end of the processing pipleline (LAMBDA_POSTPROCESS_HOOK) before the user profile data is saved to DynamoDB.
+- New feature - A *beta* [Javascript Lambda Hook SDK](./docs/lambda_hook_sdk.MD) has been created. It will automatically be attached to [JavaScript Lambda Hooks](./templates/examples/extensions/js_lambda_hooks/README.md) added to your QnABot repository. Please see the [Recent Topics Lambda](./templates/examples/extensions/js_lambda_hooks/CreateRecentTopicsResponse/CreateRecentTopicsResponse.js) for an example.
+
 ### Version 4.7.3
-- The CloudFormation template now allows configuration of provisioned concurrency for the Fulfillment Lambda function. 
+
+- The CloudFormation template now allows configuration of provisioned concurrency for the Fulfillment Lambda function.
   The default is 0 but can be changed to a higher integer value. Provisioned concurrency will increase Lambda costs.
 
 ### Version 4.7.1
+
 - LexV2 built-in Elicit Response bots have been added.
 - Custom settings can now be exported and imported from the Content Designer Settings page.
 
 ### Version 4.7.0
 
-- QnABot now supports LexV2 with voice interaction in multiple languages. 
-  - Two installation/update modes are now available: 
+- QnABot now supports LexV2 with voice interaction in multiple languages.
+  - Two installation/update modes are now available:
     - (i) LexV1 + LexV2 (default, recommended for most AWS regions.
     - (ii) LexV2-only (currently recommended for AWS regions where LexV1 is not available).
-  - LexV2 locales are specified via a new CloudFormation parameter 
-    - The default locales are US English, US Spanish and Canadian French. 
-- The QnABot web client now uses LexV2 and supports dynamic bot locale selection from a new title bar menu. 
-- Custom LexV2 Elicit Response bots are now supported. The built-in response bots still use LexV1 and are 
-  available only when QnABot is installed in LexV1+LexV2 mode. 
+  - LexV2 locales are specified via a new CloudFormation parameter
+    - The default locales are US English, US Spanish and Canadian French.
+- The QnABot web client now uses LexV2 and supports dynamic bot locale selection from a new title bar menu.
+- Custom LexV2 Elicit Response bots are now supported. The built-in response bots still use LexV1 and are
+  available only when QnABot is installed in LexV1+LexV2 mode.
 - CloudFormation deployment is now available for Canada/Montreal region (LexV2-only mode).
-- Amazon Connect integration in the Canada/Montreal region supports multiple voice languages using LexV2. 
-- The Content Designer 'Test All' feature now uses LexV2. 
-- Content Designer's "Rebuild Lex Bot" feature now rebuilds both LexV2 and LexV1 bots 
-- Non-English LexV2 bot locales are automatically generated with sample utterances translated from English questions using Amazon Translate. 
-- Content Designer's Import feature now supports Excel spreadsheets as well as the existing JSON format. 
-- QnABot's Elasticsearch cache is now automatically kept warm to improve query time consistency. 
+- Amazon Connect integration in the Canada/Montreal region supports multiple voice languages using LexV2.
+- The Content Designer 'Test All' feature now uses LexV2.
+- Content Designer's "Rebuild Lex Bot" feature now rebuilds both LexV2 and LexV1 bots
+- Non-English LexV2 bot locales are automatically generated with sample utterances translated from English questions using Amazon Translate.
+- Content Designer's Import feature now supports Excel spreadsheets as well as the existing JSON format.
+- QnABot's Elasticsearch cache is now automatically kept warm to improve query time consistency.
 - Negative feedback (thumbs down) messages can now generate notifications (text, email, etc.) using Amazon SNS.
 
 ### Version 4.6.0
@@ -173,28 +189,4 @@ See the [LICENSE.md](LICENSE.md) file for details
   - ALT_SEARCH_KENDRA_FALLBACK_CONFIDENCE_SCORE - Answers will only be returned that or at or above the specified [confidence level](https://aws.amazon.com/about-aws/whats-new/2020/09/amazon-kendra-launches-confidence-scores/) when using Kendra Fallback
   - ALT_SEARCH_KENDRA_FAQ_CONFIDENCE_SCORE - Synchronized FAQ questions will only be matched to an ElasticSearch question if the Kendra FAQ  confidence level is at or above the specified confidence level.
 
-### Version 4.5.0
-
-- Added single click deployment support for four additional regions
-- Changed unencrypted Amazon Elasticsearch instance types to be t3.small.elasticsearch  
-- Changed default number of nodes for Amazon Elasticsearch cluster to 4 for better production level
-  cluster performance and resiliency. This can be changed to 2 for development clusters if desired.
-- Added Personal Identifiable Information detection support using Amazon Comprehend - [readme](./docs/PII_Detection/README.md)
-- Added web indexing support using Amazon Kendra  - [readme](./docs/kendra_crawler_guide/README.md)
-- Added Amazon Translate custom terminology support - [readme](./docs/custom_terminology_guide/README.md)
-- Added multi-language translation with QnABot Kendra fallback processing
-- Added support for signing S3 URLs for bot responses, using handlebar syntax - [readme](./lambda/proxy-es/lib/HANDLEBARS_README.md)
-- Added support to defining user specified custom settings
-- Lambdahook responses can now be used with document chaining and are translated when multi-language support is enabled
-- Improved support when contractions are used in utterances  
-- Kendra Fallback message prefixes are now configurable in QnABot settings
-- Fixed bugs and defects
-- To improve performance, resiliency, and security, the Elasticsearch cluster will default to using ENCRYPTED nodes
-  using the c5.large.elasticsearch instance type. If UNENCRYPTED is selected, the
-  t3.small.elasticsearch instance types will be used. The default number of nodes in a new cluster is now 4 for improved
-  resiliency. The number of cluster nodes can be reduced to 2 for development environments
-  if desired.
-- QnABot distribution regions now available for one click deployment have increased to 8 regions. These are Northern Virginia (us-east-1), Oregon (us-west-2),  Ireland (eu-west-1), London (eu-west-2), Frankfurt (eu-central-1), Sydney (ap-southeast-2), Singapore (ap-southeast-1), and Tokyo (ap-northeast-1).
-
-A [workshop](https://github.com/aws-samples/aws-ai-qna-bot/tree/master/workshops/reinvent2019/readme.md) is available in GitHub
-that will walk you through setting up this feature.
+A [workshop](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/20c56f9e-9c0a-4174-a661-9f40d9f063ac/en-US) is available that will walk you through using QnABot.

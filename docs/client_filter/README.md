@@ -14,11 +14,9 @@ Choose **Import** from the Tools menu.
 
 Expand the dropdown menu under **Examples/Extensions** and load the **ClientFilterDemo** question bank.
 
-![](choose_client_filter.png)
-
+![choose client filter](choose_client_filter.png)
 
 The sample question bank is pre-loaded with questions tagged with client filters.
-
 
 ## Sample Flows Demonstrating Client Filtering
 
