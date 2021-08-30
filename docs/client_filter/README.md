@@ -10,7 +10,7 @@ In the included example question bank, we use client filtering for a user lookin
 
 Choose **Import** from the Tools menu.
 
-![Import Tool](import.png)
+![Import Tool](./import.png)
 
 Expand the dropdown menu under **Examples/Extensions** and load the **ClientFilterDemo** question bank.
 
