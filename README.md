@@ -8,8 +8,14 @@ This repository contains code for the QnABot, described in the AWS AI blog post 
 
 See the "Getting Started" to launch your own QnABot.
 
-**See all the new features list for 4.7.3** [Fulfillment Lambda Provisioned Concurrency](#new-features)
+**See all the new features list for 4.7.4** [Improved Kendra web crawling support, Client Filtering, Improved support for Lambda hooks](#new-features)
 
+4.7.4
+
+- Support for Kendra's new Web Crawler
+- Improved Lambda Hooks support
+- "Client Filtering" QnaBot can respond to the same question differently based on client context like the parent page for Lex Web UI dependent on a session attribute.
+ 
 4.7.3
 
 - The QnABot fulfillment Lambda function can now be configured for provisioned concurrency to further improve query
