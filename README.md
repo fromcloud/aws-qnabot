@@ -142,7 +142,7 @@ See the [LICENSE.md](LICENSE.md) file for details
 such as the web page where QnABot is hosted or the type of contact calling in through Connect.
 - New setting - ALT_SEARCH_KENDRA_RESPONSE_TYPES - to allow Kendra responses to be filtered based on [Response Types](https://docs.aws.amazon.com/kendra/latest/dg/response-types.html).
 - New setting - ALT_SEARCH_KENDRA_ABBREVIATE_MESSAGE_FOR_SSML - Kendra will return an abbreviated response when set to "true" when used with a voice channel like Amazon Connect, which is the current behavior.  
-When set to "false", Kendra will return the entire first response.  This setting is best used along with ALT_SEARCH_KENDRA_RESPONSE_TYPES with a setting of "DOCUMENT".
+When set to "false", Kendra will return the entire first response.  This setting is best used along with ALT_SEARCH_KENDRA_RESPONSE_TYPES with a setting of "ANSWER,QUESTION_ANSWER".
 - New feature - QnABot now supports the concept of "global Lambda hooks".  This allows you specify a Lambda that is called at the beginning (LAMBDA_PREPROCESS_HOOK) of the processing pipeline before the user profile data is loaded and at the end of the processing pipleline (LAMBDA_POSTPROCESS_HOOK) before the user profile data is saved to DynamoDB.
 - New feature - A *beta* [Javascript Lambda Hook SDK](./docs/lambda_hook_sdk.MD) has been created. It will automatically be attached to [JavaScript Lambda Hooks](./templates/examples/extensions/js_lambda_hooks/README.md) added to your QnABot repository. Please see the [Recent Topics Lambda](./templates/examples/extensions/js_lambda_hooks/CreateRecentTopicsResponse/CreateRecentTopicsResponse.js) for an example.
 
@@ -176,15 +176,6 @@ When set to "false", Kendra will return the entire first response.  This setting
 - QnABot's Elasticsearch cache is now automatically kept warm to improve query time consistency.
 - Negative feedback (thumbs down) messages can now generate notifications (text, email, etc.) using Amazon SNS.
 
-### Version 4.6.0
 
-- Kendra integration is now fully automated during install or update when the new default Kendra Index Id parameter is provided.
-- Kendra custom no_hits item required in earlier releases is no longer required to enable Kendra Fallback and should be removed, configurable confidence thresholds now available for filtering Kendra results.
-- Kibana dashboard now shows additional detail on questions answered via Kendra FAQ and Kendra Fallback.
-- Standard markdown is now automatically converted to Slack markdown when using Slack, Kibana dashboard logs and metrics retention period is now configurable during install or update, Lambda runtime upgraded to Node.js 12.x.
-- Two new settings have been added
-
-  - ALT_SEARCH_KENDRA_FALLBACK_CONFIDENCE_SCORE - Answers will only be returned that or at or above the specified [confidence level](https://aws.amazon.com/about-aws/whats-new/2020/09/amazon-kendra-launches-confidence-scores/) when using Kendra Fallback
-  - ALT_SEARCH_KENDRA_FAQ_CONFIDENCE_SCORE - Synchronized FAQ questions will only be matched to an ElasticSearch question if the Kendra FAQ  confidence level is at or above the specified confidence level.
 
 A [workshop](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/20c56f9e-9c0a-4174-a661-9f40d9f063ac/en-US) is available that will walk you through using QnABot.
