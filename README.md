@@ -15,7 +15,7 @@ See the "Getting Started" to launch your own QnABot.
 - Support for Kendra's new Web Crawler
 - Improved Lambda Hooks support
 - "Client Filtering" QnaBot can respond to the same question differently based on client context like the parent page for Lex Web UI dependent on a session attribute.
- 
+
 4.7.3
 
 - The QnABot fulfillment Lambda function can now be configured for provisioned concurrency to further improve query
@@ -40,15 +40,7 @@ See the "Getting Started" to launch your own QnABot.
   - (i) LexV1 + LexV2 (default, recommended for most AWS regions.
     - (ii) LexV2-only (currently recommended for AWS regions where LexV1 is not available).
   
-4.6.0 provides a number of new features described below. Several to call attention to are the following:
 
-- Kendra custom no_hits item required in earlier releases is no longer required to enable Kendra Fallback and should be removed, configurable confidence thresholds now available for filtering Kendra results.
-- Kendra integration is now fully automated during install or update when the new default Kendra Index Id parameter is provided.
-- Standard markdown is now automatically converted to Slack markdown when using Slack, Kibana dashboard logs and metrics retention period is now configurable during install or update, Lambda runtime upgraded to Node.js 12.x.
-
-**New features in 4.6.0** [Improved Kendra integration and Kibana dashboards. Additional settings to filter Kendra responses based on confidence levels](#new-features)
-
-**New features in 4.5.0** [Kendra Web Crawler, Comprehend PII Detection, Translate Custom Terminology, Increased deployment regions](#new-features)
 
 ## Upgrade Notes
 
