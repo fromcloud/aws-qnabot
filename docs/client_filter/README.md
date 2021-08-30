@@ -10,15 +10,15 @@ In the included example question bank, we use client filtering for a user lookin
 
 Choose **Import** from the Tools menu.
 
-![Import Tool](./Import.png)
+![Import Tool](import.png)
 
 Expand the dropdown menu under **Examples/Extensions** and load the **ClientFilterDemo** question bank.
 
-![Import question bank](./clientfilterdemobank.png)
+![](choose_client_filter.png)
+
 
 The sample question bank is pre-loaded with questions tagged with client filters.
 
-![Question List](./preloadedclientfilters.png)
 
 ## Sample Flows Demonstrating Client Filtering
 
@@ -43,11 +43,11 @@ There are several questions in the **"clientfilterdemo"** bank which do not have
 ### Sample Flow #3: Filtered
 
 Please greet the bot in the QnABot Client with **"Hello!"**. Select **"Let me ask questions Lex"** to begin.
-![Sample Flow 3](./sampleflow3.png =50%x50%)
+![Sample Flow 3](./sampleflow3.png)
 
 Client filtering enables the user to ask general questions but still receive pertinent responses to the Amazon Lex Service. Even though the same question has been presented as in Sample Flow 2, "How much does it cost?", the client filter has been set to **"lex"**, so only answers with the corresponding filter will be returned in the QnABot client.
 
-![Sample Flow 3.2](./sampleflow3.2.png =50%x50%)
+![Sample Flow 3.2](./sampleflow3.2.png)
 
 To further demonstrate the filter, the bot will only respond with Amazon Lex related answers unless the filter is otherwise changed.
 
