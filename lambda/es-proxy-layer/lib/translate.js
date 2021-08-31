@@ -60,6 +60,7 @@ exports.translate_hit = async function(hit,usrLang,req){
     let a = _.get(hit, "a");
     let markdown = _.get(hit, "alt.markdown");
     let ssml = _.get(hit, "alt.ssml");
+    let tease = _.get(hit,"alt.tease");
     let rp = _.get(hit, "rp");
     let r = _.get(hit, "r");
     // catch and log errors before throwing exception.
@@ -77,6 +78,15 @@ exports.translate_hit = async function(hit,usrLang,req){
             hit_out.alt.markdown  = replaceAll(res,'] (http', '](http');
         } catch (e) {
             console.log("ERROR: Markdown caused Translate exception: ", a)
+            throw (e);
+        }
+    }
+    console.log("Is Tease Translating " + _.get(hit,'autotranslate.alt.tease'))
+    if (tease && _.get(hit,'autotranslate.alt.tease')) {
+        try {
+            hit_out.alt.tease = await get_translation(hit_out.alt.tease, usrLang,req);
+        } catch (e) {
+            console.log("ERROR:Tease caused Translate exception: ", a)
             throw (e);
         }
     }
