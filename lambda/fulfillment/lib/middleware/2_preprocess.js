@@ -4,7 +4,7 @@ var util=require('./util');
 var jwt=require('./jwt');
 var AWS=require('aws-sdk');
 
-async function get_userInfo(userId, idattrs) {
+async function get_userInfo(userId, idattrs, custom_attributes = undefined) {
     var default_userInfo = {
         UserId:userId,
         InteractionCount:1
@@ -45,14 +45,16 @@ async function get_userInfo(userId, idattrs) {
     if (_.get(idattrs, 'profile')) {
         _.set(req_userInfo, 'Profile', _.get(idattrs, 'profile'));
     }
+    // add custom_attributes to user profile
+    if(custom_attributes){
+        _.set(req_userInfo,"custom_attributes",custom_attributes)
+    }
     // append time since last seen
     var now = new Date();
     var lastSeen = Date.parse(req_userInfo.LastSeen || "1970/1/1 12:00:00");
     var timeSinceLastInteraction = Math.abs(now - lastSeen)/1000; // seconds
     _.set(req_userInfo, 'TimeSinceLastInteraction', timeSinceLastInteraction);
     console.log("Request User Info: ", req_userInfo);
-    //TODO: KDT Remove This???!!!!
-    _.set(req_userInfo, 'UserId', userId);
     return req_userInfo;
 }
 
@@ -191,7 +193,15 @@ module.exports=async function preprocess(req,res){
     // TODO Will need to rework logic if/when we link userid across clients (SMS,WebUI,Alexa)
     console.log("userid found",idattrs["cognito:username"],idattrs["verifiedIdentity"])
     var userId = idattrs["cognito:username"] && idattrs["verifiedIdentity"] == "true" ? idattrs["cognito:username"] : req._userId;
-    var req_userInfo = await get_userInfo(userId, idattrs);
+    if(_.get(req,"_settings.SAVE_CLIENT_CUSTOM_ATTRIBUTES","false") == "true"){
+        let custom_attributes = _.get(req,"session.custom_attributes")
+        if(JSON.stringify(custom_attributes).length > 1024*2)
+        {
+            custom_attributes = undefined
+            console.log("WARNING: The custom attribute session attribute can not be more than 2048 bytes -- NOT SAVING")
+        }
+    }
+    var req_userInfo = await get_userInfo(userId, idattrs,custom_attributes);
     //UserInfo might already be set by preprocessing hook. If it is combine it with what we get from DDB
     let userInfo = _.get(req,"_userInfo",{})
     Object.assign(req_userInfo,userInfo )
