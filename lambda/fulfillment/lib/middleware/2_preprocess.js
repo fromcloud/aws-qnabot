@@ -4,7 +4,7 @@ var util=require('./util');
 var jwt=require('./jwt');
 var AWS=require('aws-sdk');
 
-async function get_userInfo(userId, idattrs, custom_attributes = undefined) {
+async function get_userInfo(userId, idattrs, userPrefs = undefined) {
     var default_userInfo = {
         UserId:userId,
         InteractionCount:1
@@ -45,9 +45,9 @@ async function get_userInfo(userId, idattrs, custom_attributes = undefined) {
     if (_.get(idattrs, 'profile')) {
         _.set(req_userInfo, 'Profile', _.get(idattrs, 'profile'));
     }
-    // add custom_attributes to user profile
-    if(custom_attributes){
-        _.set(req_userInfo,"custom_attributes",custom_attributes)
+    // add session attributes userPrefs to user profile
+    if(userPrefs){
+        _.set(req_userInfo,"userPrefs",userPrefs)
     }
     // append time since last seen
     var now = new Date();
@@ -193,20 +193,23 @@ module.exports=async function preprocess(req,res){
     // TODO Will need to rework logic if/when we link userid across clients (SMS,WebUI,Alexa)
     console.log("userid found",idattrs["cognito:username"],idattrs["verifiedIdentity"])
     var userId = idattrs["cognito:username"] && idattrs["verifiedIdentity"] == "true" ? idattrs["cognito:username"] : req._userId;
-    let custom_attributes = _.get(req,"session.custom_attributes")
+    let userPrefs = _.get(req,"session.userPrefs")
 
-    if(_.get(req,"_settings.SAVE_CLIENT_CUSTOM_ATTRIBUTES","false") == "true"){
-        if(JSON.stringify(custom_attributes).length > 1024*2)
+    if(_.get(req,"_settings.SAVE_CLIENT_USERPREFS","false") == "true"){
+        if(JSON.stringify(userPrefs).length > 1024*2)
         {
-            custom_attributes = undefined
-            console.log("WARNING: The custom attribute session attribute can not be more than 2048 bytes -- NOT SAVING")
+            userPrefs = undefined
+            console.log("WARNING: The userPrefs session attribute can not be more than 2048 bytes -- NOT SAVING")
         }
     }
-    var req_userInfo = await get_userInfo(userId, idattrs,custom_attributes);
+    var req_userInfo = await get_userInfo(userId, idattrs,userPrefs);
     //UserInfo might already be set by preprocessing hook. If it is combine it with what we get from DDB
     let userInfo = _.get(req,"_userInfo",{})
     Object.assign(req_userInfo,userInfo )
     _.set(req,"_userInfo", req_userInfo);
+    //set the userPrefs session attribute to the value returned from DDB
+    _.set(req,"session.userPrefs",_.get(req_userInfo,"userPrefs",{}))
+
     // Add _userInfo to res, with updated timestamps
     // May be further modified by lambda hooks
     // Will be saved back to DynamoDB in userInfo.js
