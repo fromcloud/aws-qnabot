@@ -30,7 +30,7 @@ module.exports = {
     add_user_attribute: function(event,key,value){
         let attributes = this.list_user_attributes(event)
         attributes[key] = value
-        _.set(event,"res.session.",attributes)
+        _.set(event,"res.session",attributes)
         return this.list_user_attributes(event)
     },
 

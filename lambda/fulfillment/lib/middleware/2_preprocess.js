@@ -193,8 +193,9 @@ module.exports=async function preprocess(req,res){
     // TODO Will need to rework logic if/when we link userid across clients (SMS,WebUI,Alexa)
     console.log("userid found",idattrs["cognito:username"],idattrs["verifiedIdentity"])
     var userId = idattrs["cognito:username"] && idattrs["verifiedIdentity"] == "true" ? idattrs["cognito:username"] : req._userId;
+    let custom_attributes = _.get(req,"session.custom_attributes")
+
     if(_.get(req,"_settings.SAVE_CLIENT_CUSTOM_ATTRIBUTES","false") == "true"){
-        let custom_attributes = _.get(req,"session.custom_attributes")
         if(JSON.stringify(custom_attributes).length > 1024*2)
         {
             custom_attributes = undefined
