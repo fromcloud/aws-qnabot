@@ -14,23 +14,15 @@ var responsebots = _.fromPairs(require('../../examples/examples/responsebots-lex
     return [x, { "Fn::GetAtt": ["ExamplesStack", `Outputs.${x}`] }]
   }))
 
-const filfillmentZip = (fs.existsSync("../../build/lambda/fulfillment.zip") ? "../../" : "./") + "build/lambda/fulfillment.zip"; 
-const fulfillmentZipDate =  fs.statSync(filfillmentZip).mtime.toISOString()
-const fulfillmentZipDateHash = crypto.createHash("sha256").update(fulfillmentZipDate).digest("hex")
-
-const esProxyLayerZip = (fs.existsSync("../../build/lambda/es-proxy-layer.zip") ? "../../" : "./") + "build/lambda/es-proxy-layer.zip";
-const esProxyLayerZipDate = fs.statSync(esProxyLayerZip).mtime.toISOString()
-const esProxyLayerZipDateHash = crypto.createHash("sha256").update(esProxyLayerZipDate).digest("hex")
-
-const commonModuleLayerZip = (fs.existsSync("../../build/lambda/common-modules-layer.zip") ? "../../" : "./") + "build/lambda/common-modules-layer.zip";
-const commonModulesDate = fs.statSync(commonModuleLayerZip).mtime.toISOString()
-const commonModulesDateHash = crypto.createHash("sha256").update(commonModulesDate).digest("hex")
-
-const awsSdkLayerZip = (fs.existsSync("../../build/lambda/aws-sdk-layer.zip") ? "../../" : "./") + "build/lambda/aws-sdk-layer.zip";
-const awsSdkLayerZipDate = fs.statSync(awsSdkLayerZip).mtime.toISOString()
-const awsSdkZipDateHash = crypto.createHash("sha256").update(awsSdkLayerZipDate).digest("hex")
-
-const fulfillmentHash =  crypto.createHash("sha256").update(fulfillmentZipDateHash + esProxyLayerZipDateHash + awsSdkZipDateHash + commonModulesDateHash).digest("hex")
+const filesToHash = ['fulfillment.zip', 'es-proxy-layer.zip','common-modules-layer.zip','aws-sdk-layer.zip']
+const comboHash = filesToHash.map(x => {
+    let filePath = (fs.existsSync("../../build/lambda/" + x) ? "../../" : "./") + "build/lambda/" + x
+    let fileBuffer = fs.readFileSync(filePath);
+    return crypto.createHash("sha256").update(fileBuffer).digest("hex")
+  }).reduce((a,b) => {
+    return a + b;
+  }); 
+const fulfillmentHash =  crypto.createHash("sha256").update(comboHash).digest("hex")
 
 module.exports = {
   "Alexa": {
