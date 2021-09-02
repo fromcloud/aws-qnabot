@@ -17,7 +17,6 @@ async function get_userInfo(userId, idattrs, userPrefs = undefined) {
             'UserId': userId
         },
     };
-    console.log("Getting user info for user: ", userId, "from DynamoDB table: ", usersTable);
     var ddbResponse = {};
     try {
         ddbResponse = await docClient.get(params).promise();
@@ -54,7 +53,6 @@ async function get_userInfo(userId, idattrs, userPrefs = undefined) {
     var lastSeen = Date.parse(req_userInfo.LastSeen || "1970/1/1 12:00:00");
     var timeSinceLastInteraction = Math.abs(now - lastSeen)/1000; // seconds
     _.set(req_userInfo, 'TimeSinceLastInteraction', timeSinceLastInteraction);
-    console.log("Request User Info: ", req_userInfo);
     return req_userInfo;
 }
 
@@ -64,7 +62,6 @@ async function update_userInfo(userId, req_userInfo) {
     res_userInfo.FirstSeen = req_userInfo.FirstSeen || dt.toString();
     res_userInfo.LastSeen = dt.toString();
     res_userInfo.InteractionCount = req_userInfo.InteractionCount + 1;
-    console.log("Response User Info: ", res_userInfo);
     return res_userInfo;
 }
 
@@ -73,11 +70,9 @@ const comprehend_client = new AWS.Comprehend();
 const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ignore_list) => {
 
 
-    console.log("Testing redaction ")
     if(piiRegex){
         let re = new RegExp(piiRegex,"g");
         let redacted_text = text.replace(re,"XXXXXX");
-        console.log(`redacted_text ${redacted_text} text ${text}`)
         var result = redacted_text != text;
         console.log(`Is Redacted ${result}`)
         if(result) //if the regex was returned. No need to call Comprehend
@@ -93,7 +88,7 @@ const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ign
             try
             {
                 var comprehendResult = await comprehend_client.detectPiiEntities(params).promise();
-                console.log(JSON.stringify(comprehendResult) + "entity count == " + comprehendResult.Entities.length )
+                process.env.comprenhend_pii = comprehendResult //This will be used by the filter.
                 if(!("Entities" in comprehendResult) ||  comprehendResult.Entities.length == 0)
                 {
                     console.log("No PII found by Comprehend")
@@ -101,8 +96,9 @@ const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ign
                 }
                 console.log("Ignoring types for PII == " + pii_rejection_ignore_list)
                 pii_rejection_ignore_list = pii_rejection_ignore_list.toLowerCase().split(",")
-
-                return comprehendResult.Entities.filter(entity => entity.Score > 0.90 && pii_rejection_ignore_list.indexOf(entity.Type.toLowerCase()) == -1).length > 0;;
+                let entitiesToFilter = comprehendResult.Entities.filter(entity => entity.Score > 0.90 && pii_rejection_ignore_list.indexOf(entity.Type.toLowerCase()) == -1)
+                process.env.found_comprehend_pii = entitiesToFilter.map(entity => text.slice(entity.BeginOffset,entity.EndOffset))
+                return entitiesToFilter.length > 0;;
 
             }catch(exception)
             {
@@ -175,7 +171,6 @@ module.exports=async function preprocess(req,res){
     }
     if(_.get(req,'_settings.PII_REJECTION_ENABLED')){
         console.log("Checking for PII")
-        console.log("Request--" + JSON.stringify(req))
         if(_.get(req,"_settings.PII_REJECTION_QUESTION")){
             if(await isPIIDetected(req.question,
                 _.get(req,"_settings.PII_REJECTION_WITH_COMPREHEND"), 

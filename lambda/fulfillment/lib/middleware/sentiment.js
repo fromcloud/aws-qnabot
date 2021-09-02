@@ -5,7 +5,6 @@ var aws=require('aws-sdk');
 
 function get_sentiment_from_comprehend(utterance) {
     // get sentiment and scores from utterance using Comprehend detectSentiment api
-    console.log("detecting sentiment from utterance using Comprehend: ", utterance);
     var keywords="";
     var comprehend = new aws.Comprehend();
     var comprehend_params = {

@@ -7,10 +7,8 @@ module.exports=class router {
     }
 
     async start(event,callback){
-        console.log("Request:"+JSON.stringify(event,null,2))
         try{
             var res=await this._walk( {_event:event})
-            console.log("final:",JSON.stringify(res,null,2))
             callback(null,res)
         }catch(e){
             console.log("throwing response:",JSON.stringify(e))
@@ -25,7 +23,6 @@ module.exports=class router {
         
     }
     async _walk(req,res={},index=0){
-        console.log(JSON.stringify({req,res},null,2))
 
         if(this.middleware[index]){
             console.log(`middleware=${this.middleware[index].name}`)

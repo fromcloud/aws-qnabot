@@ -34,8 +34,6 @@ module.exports = {
         return this.list_user_attributes(event)
     },
 
-
-
     list_settings: function (event) {
         return _.get(event, "req._settings", {})
     },

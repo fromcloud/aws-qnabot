@@ -25,14 +25,28 @@ const filter = text => {
         text = text.replace(/"refreshtoken":\s*"[^"]+?([^\/"]+)"/g, '"refreshtoken":"<token redacted>"');
         if (process.env.QNAREDACT === "true") {
             let re = new RegExp(process.env.REDACTING_REGEX, "g");
-            return text.replace(re, "XXXXXX");
+
         } else {
             return text;
         }
     }
 };
 
-require('intercept-stdout')(filter, filter);
+function createComprehendRegex(){
+    let phrases = process.env.comprenhend_pii 
+    console.log("phrases " + phrases)
+    if(phrases){
+        let pii_regex = phrases.reduce((regex,phrase) => regex + "(" + phrase + ") |")
+        pii_regex = pii_regex.slice(0,-1)
+        return new RegExp(pii_regex,"g")
+    }
+
+
+}
+
+const intercept=require('intercept-stdout')
+intercept(filter)
+
 
 var middleware=fs.readdirSync(`${__dirname}/${lib}`)
     .filter(name=>name.match(/\d*_.*\.js/))
