@@ -1,5 +1,7 @@
 var Promise=require('bluebird')
 var _=require('lodash')
+const qnabot = require("/opt/lib/logging")
+
 
 module.exports=class router {
     constructor(){
@@ -11,7 +13,7 @@ module.exports=class router {
             var res=await this._walk( {_event:event})
             callback(null,res)
         }catch(e){
-            console.log("throwing response:",JSON.stringify(e))
+            qnabot.log("throwing response:",JSON.stringify(e))
             if(e.action==='END'){
                 callback(null)
             }else if(e.action==="RESPOND"){
@@ -25,7 +27,7 @@ module.exports=class router {
     async _walk(req,res={},index=0){
 
         if(this.middleware[index]){
-            console.log(`middleware=${this.middleware[index].name}`)
+            qnabot.log(`middleware=${this.middleware[index].name}`)
             var result=await this.middleware[index](req,res)
             return await this._walk(result.req,result.res,++index)
         }else{

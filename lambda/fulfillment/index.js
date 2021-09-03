@@ -15,37 +15,6 @@ var router=new (require('./lib/router'))()
 var fs=require('fs')
 const esWarmer=new (require('./lib/warmer'))();
 
-const filter = text => {
-    if (process.env.DISABLECLOUDWATCHLOGGING === "true") {
-        return "cloudwatch logging disabled";
-    } else {
-        // always redact jwts
-        text = text.replace(/"accesstokenjwt":\s*"[^"]+?([^\/"]+)"/g, '"accesstokenjwt":"<token redacted>"');
-        text = text.replace(/"idtokenjwt":\s*"[^"]+?([^\/"]+)"/g, '"idtokenjwt":"<token redacted>"');
-        text = text.replace(/"refreshtoken":\s*"[^"]+?([^\/"]+)"/g, '"refreshtoken":"<token redacted>"');
-        if (process.env.QNAREDACT === "true") {
-            let re = new RegExp(process.env.REDACTING_REGEX, "g");
-
-        } else {
-            return text;
-        }
-    }
-};
-
-function createComprehendRegex(){
-    let phrases = process.env.comprenhend_pii 
-    console.log("phrases " + phrases)
-    if(phrases){
-        let pii_regex = phrases.reduce((regex,phrase) => regex + "(" + phrase + ") |")
-        pii_regex = pii_regex.slice(0,-1)
-        return new RegExp(pii_regex,"g")
-    }
-
-
-}
-
-const intercept=require('intercept-stdout')
-intercept(filter)
 
 
 var middleware=fs.readdirSync(`${__dirname}/${lib}`)
