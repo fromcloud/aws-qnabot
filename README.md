@@ -40,8 +40,6 @@ See the "Getting Started" to launch your own QnABot.
   - (i) LexV1 + LexV2 (default, recommended for most AWS regions.
     - (ii) LexV2-only (currently recommended for AWS regions where LexV1 is not available).
   
-
-
 ## Upgrade Notes
 
 During an upgrade, we recommend that existing QnABot content first be exported and downloaded from the Content Designer prior to
@@ -151,7 +149,6 @@ When set to "false", Kendra will return the entire first response.  This setting
 CloudWatch Logs
 - FIX: The [intercept-stdout](https://www.npmjs.com/package/intercept-stdout) npm module that QnABot used for log redaction does not work with the later Node Lambda runtimes.  QnABot now uses it's own logger function for redaction.
 
-
 ### Version 4.7.3
 
 - The CloudFormation template now allows configuration of provisioned concurrency for the Fulfillment Lambda function.
@@ -181,7 +178,5 @@ CloudWatch Logs
 - Content Designer's Import feature now supports Excel spreadsheets as well as the existing JSON format.
 - QnABot's Elasticsearch cache is now automatically kept warm to improve query time consistency.
 - Negative feedback (thumbs down) messages can now generate notifications (text, email, etc.) using Amazon SNS.
-
-
 
 A [workshop](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/20c56f9e-9c0a-4174-a661-9f40d9f063ac/en-US) is available that will walk you through using QnABot.
