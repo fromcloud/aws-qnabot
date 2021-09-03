@@ -73,14 +73,11 @@ const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ign
 
 
     qnabot.log("Testing redaction ")
+    let found_redacted_pii = false
     if(piiRegex){
         let re = new RegExp(piiRegex,"g");
         let redacted_text = text.replace(re,"XXXXXX");
-        qnabot.log(`redacted_text ${redacted_text} text ${text}`)
-        var result = redacted_text != text;
-        qnabot.log(`Is Redacted ${result}`)
-        if(result) //if the regex was returned. No need to call Comprehend
-            return result;
+        found_redacted_pii = redacted_text != text;
     } else {
         qnabot.log("Warning: No value found for setting  PII_REJECTION_REGEX not using REGEX Matching")
     }
@@ -102,7 +99,8 @@ const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ign
                 pii_rejection_ignore_list = pii_rejection_ignore_list.toLowerCase().split(",")
                 let entitiesToFilter = comprehendResult.Entities.filter(entity => entity.Score > 0.90 && pii_rejection_ignore_list.indexOf(entity.Type.toLowerCase()) == -1)
                 process.env.found_comprehend_pii = entitiesToFilter.map(entity => text.slice(entity.BeginOffset,entity.EndOffset))
-                return entitiesToFilter.length > 0;;
+
+                return entitiesToFilter.length > 0 || found_redacted_pii;;
 
             }catch(exception)
             {
