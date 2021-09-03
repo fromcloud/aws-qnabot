@@ -147,6 +147,10 @@ such as the web page where QnABot is hosted or the type of contact calling in th
 When set to "false", Kendra will return the entire first response.  This setting is best used along with ALT_SEARCH_KENDRA_RESPONSE_TYPES with a setting of "ANSWER,QUESTION_ANSWER".
 - New feature - QnABot now supports the concept of "global Lambda hooks".  This allows you specify a Lambda that is called at the beginning (LAMBDA_PREPROCESS_HOOK) of the processing pipeline before the user profile data is loaded and at the end of the processing pipleline (LAMBDA_POSTPROCESS_HOOK) before the user profile data is saved to DynamoDB.
 - New feature - A *beta* [Javascript Lambda Hook SDK](./docs/lambda_hook_sdk.MD) has been created. It will automatically be attached to [JavaScript Lambda Hooks](./templates/examples/extensions/js_lambda_hooks/README.md) added to your QnABot repository. Please see the [Recent Topics Lambda](./templates/examples/extensions/js_lambda_hooks/CreateRecentTopicsResponse/CreateRecentTopicsResponse.js) for an example.
+- Improved redaction support.  QnABot can now use the [Amazon Comprehend PII Detection](https://docs.aws.amazon.com/comprehend/latest/dg/how-pii.html) to redact
+CloudWatch Logs
+- FIX: The [intercept-stdout](https://www.npmjs.com/package/intercept-stdout) npm module that QnABot used for log redaction does not work with the later Node Lambda runtimes.  QnABot now uses it's own logger function for redaction.
+
 
 ### Version 4.7.3
 

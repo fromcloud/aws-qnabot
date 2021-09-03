@@ -106,6 +106,7 @@ const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ign
             {
                 qnabot.log("Warning: Exception while trying to detect PII with Comprehend. Skipping...");
                 qnabot.log("Exception " + exception);
+                process.env.DISABLECLOUDWATCHLOGGING = true //if there is an error during Comprehend PII detection, turn off all logging for this request
                 return false;
             }
     
