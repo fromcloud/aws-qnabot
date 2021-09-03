@@ -98,13 +98,14 @@ const isPIIDetected = async (text,useComprehendForPII,piiRegex,pii_rejection_ign
                 qnabot.log("Ignoring types for PII == " + pii_rejection_ignore_list)
                 pii_rejection_ignore_list = pii_rejection_ignore_list.toLowerCase().split(",")
                 let entitiesToFilter = comprehendResult.Entities.filter(entity => entity.Score > 0.90 && pii_rejection_ignore_list.indexOf(entity.Type.toLowerCase()) == -1)
-                process.env.found_comprehend_pii = entitiesToFilter.map(entity => text.slice(entity.BeginOffset,entity.EndOffset))
+                //For now, we *redact* all detected PII from CloudWatch.  We accept any PII for processing that is listed PII_REJECTION_IGNORE_TYPES
+                process.env.found_comprehend_pii = comprehendResult.map(entity => text.slice(entity.BeginOffset,entity.EndOffset))  
 
                 return entitiesToFilter.length > 0 || found_redacted_pii;;
 
             }catch(exception)
             {
-                qnabot.log("Warning: Exception while trying to detect PII with Comprehend. Skipping...");
+                qnabot.log("Warning: Exception while trying to detect PII with Comprehend. All logging is disabled.");
                 qnabot.log("Exception " + exception);
                 process.env.DISABLECLOUDWATCHLOGGING = true //if there is an error during Comprehend PII detection, turn off all logging for this request
                 return false;
