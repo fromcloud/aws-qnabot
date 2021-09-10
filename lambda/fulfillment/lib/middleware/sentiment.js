@@ -15,7 +15,7 @@ function get_sentiment_from_comprehend(utterance) {
     };
     return(Promise.resolve(comprehend.detectSentiment(comprehend_params).promise()))
     .then(function(data) {
-        qnabot.log(JSON.stringify(data));
+        qnabot.log(data);
         return data ;
     });
 }

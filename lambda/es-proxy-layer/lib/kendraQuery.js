@@ -36,7 +36,7 @@ async function run_query_es(params, qid) {
         method: "GET",
         body: es_query
     });
-    qnabot.log("run_query_es result: ", JSON.stringify(es_response, null, 2));
+    qnabot.log("run_query_es result: ", es_response);
     return es_response;
 }
 
@@ -169,7 +169,7 @@ async function routeKendraRequest(request_params) {
                         // FAQ only references the QID but doesn't contain the full docunment.. retrieve it from ES
                         qnabot.log("Kendra matched qid: ", qid, ". Retrieving full document from Elasticsearch.");
                         let es_response = await run_query_es(request_params, qid) ;
-                        qnabot.log("Qid document from Kendra: ", JSON.stringify(hit));
+                        qnabot.log("Qid document from Kendra: ",hit);
                         hit = _.get(es_response, "hits.hits[0]._source"); //todo fix if null -- test from content designer
                         if(hit == null){
                             qnabot.log("WARNING: An answer was found in Kendrs FAQ, but a corresponding answer was not found in ElasticSearch for "+ hit)
@@ -178,7 +178,7 @@ async function routeKendraRequest(request_params) {
                         }
                     }
                     
-                    qnabot.log(`hit is ${JSON.stringify(hit)}`);
+                    qnabot.log(`hit is `,hit);
                     json_struct.push(hit);
 
                     kendraQueryId = res.QueryId; // store off the QueryId to use as a session attribute for feedback
@@ -237,11 +237,11 @@ async function routeKendraRequest(request_params) {
         hits_struct['kendraResultsCached'] = resArray[0];
     }
     
-    qnabot.log("RETURN: " + JSON.stringify(hits_struct));
+    qnabot.log("RETURN: ",hits_struct);
     return hits_struct;
 }
 
 exports.handler = async (request_params) => {
-    qnabot.log("kendra query request: " + JSON.stringify(request_params));
+    qnabot.log("kendra query request: ",request_params);
     return routeKendraRequest(request_params);
 };

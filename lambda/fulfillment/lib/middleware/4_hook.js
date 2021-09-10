@@ -37,11 +37,10 @@ module.exports = async function hook(req,res) {
         }  
         i=i+1 ;
     }
-    console.log("after hook")
+    qnabot.log("after hook")
     req = event.req
     res = event.res
 
-    console.log(JSON.stringify(event))
     let posthook = _.get(req,'_settings.LAMBDA_POSTPROCESS_HOOK',undefined)
     _.set(req,"_fulfillment.step","postprocess")
     if(posthook){

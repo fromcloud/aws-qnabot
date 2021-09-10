@@ -17,15 +17,15 @@ async function get_terminologies(sourceLang) {
     const translate = new AWS.Translate();
     qnabot.log("Getting registered custom terminologies");
     const configuredTerminologies = await translate.listTerminologies({}).promise();
-    qnabot.log("terminology response " + JSON.stringify(configuredTerminologies));
+    qnabot.log("terminology response ",configuredTerminologies);
     const sources = configuredTerminologies["TerminologyPropertiesList"].filter(t => t["SourceLanguageCode"] == sourceLang).map(s => s.Name);
-    qnabot.log("Filtered Sources " + JSON.stringify(sources));
+    qnabot.log("Filtered Sources ",sources);
     return sources;
 }
 
 async function get_translation(inputText, sourceLang, targetLang, req) {
     const customTerminologyEnabled = _.get(req._settings, "ENABLE_CUSTOM_TERMINOLOGY") == true;
-    qnabot.log("get translation request " + JSON.stringify(inputText));
+    qnabot.log("get translation request ",inputText);
     const params = {
         SourceLanguageCode: sourceLang, /* required */
         TargetLanguageCode: targetLang, /* required */
@@ -44,9 +44,8 @@ async function get_translation(inputText, sourceLang, targetLang, req) {
     }
     const translateClient = new AWS.Translate();
     try {
-        qnabot.log("Fulfillment params " + JSON.stringify(params));
+        qnabot.log("Fulfillment params ",params);
         const translation = await translateClient.translateText(params).promise();
-        qnabot.log("Translation response " + JSON.stringify(translation));
         return translation.TranslatedText;
     } catch (err) {
         qnabot.log("warning - error during translation. Returning: " + inputText);

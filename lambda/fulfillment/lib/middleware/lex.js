@@ -107,7 +107,7 @@ exports.parse=async function(req){
 }
 
 function filterButtons(response) {
-    qnabot.log("Before filterButtons " + JSON.stringify(response))
+    qnabot.log("Before filterButtons ",response)
 
     var filteredButtons = _.get(response.card,"buttons",[]);
     if (filteredButtons) {
@@ -118,7 +118,7 @@ function filterButtons(response) {
         }
         _.set(response.card,"buttons",filteredButtons) ;
     }
-    qnabot.log("Response from filterButtons " + JSON.stringify(response))
+    qnabot.log("Response from filterButtons " ,response)
     return response;
 }
 
@@ -130,10 +130,10 @@ function slackifyResponse(response) {
     if (_.get(response,"result.alt.markdown")) {
         let md = response.result.alt.markdown;
         qnabot.log("Converting markdown response to Slack format.");
-        qnabot.log("Original markdown: ", JSON.stringify(md));
+        qnabot.log("Original markdown: ",md);
         md = slackifyMarkdown(md);
         response.message = md ;
-        qnabot.log("Converted markdown: ", JSON.stringify(md));
+        qnabot.log("Converted markdown: ", md);
     } 
     qnabot.log("Converting Slack message javascript string to utf8 (for multi-byte compatibility).");
     return response;
@@ -276,7 +276,7 @@ exports.assemble=function(request,response){
     } else {
         out= assembleLexV2Response(response);
     }
-    qnabot.log("Lex response:",JSON.stringify(out,null,2))
+    qnabot.log("Lex response:",out)
     return out
 }
 

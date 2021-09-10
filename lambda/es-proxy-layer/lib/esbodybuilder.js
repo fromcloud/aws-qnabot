@@ -16,7 +16,7 @@ function build_qid_query(params) {
     .from(0)
     .size(1)
     .build();
-  qnabot.log("ElasticSearch Query", JSON.stringify(query, null, 2));
+  qnabot.log("ElasticSearch Query",query);
   return new Promise.resolve(query);
 }
 
@@ -108,7 +108,7 @@ function build_query(params) {
         .from(_.get(params, 'from', 0))
         .size(_.get(params, 'size', 1))
         .build();
-      qnabot.log("ElasticSearch Query", JSON.stringify(query, null, 2));
+      qnabot.log("ElasticSearch Query", query);
       return new Promise.resolve(query);
     });
 

@@ -59,15 +59,12 @@ async function get_settings() {
 
     qnabot.log("Getting Default QnABot settings from SSM Parameter Store: ", default_settings_param);
     const default_settings = await get_parameter(default_settings_param);
-    qnabot.log(`Default Settings: ${JSON.stringify(default_settings,null,2)}`);
 
     qnabot.log("Getting Custom QnABot settings from SSM Parameter Store: ", custom_settings_param);
     const custom_settings = await get_parameter(custom_settings_param);
-    qnabot.log(`Custom Settings: ${JSON.stringify(custom_settings,null,2)}`);
 
     const settings = _.merge(default_settings, custom_settings);
     _.set(settings, "DEFAULT_USER_POOL_JWKS_URL", default_jwks_url);
-    qnabot.log(`Merged Settings: ${JSON.stringify(settings,null,2)}`);
 
     if (settings.ENABLE_REDACTING) {
         qnabot.log("redacting enabled");

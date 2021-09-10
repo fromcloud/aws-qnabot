@@ -72,7 +72,7 @@ exports.parse=async function(req){
                 case "AMAZON.RepeatIntent":
                     welcome_message = await get_welcome_message(req,alexa_locale);
                     qnabot.log("At Repeat Intent") ;
-                    qnabot.log(JSON.stringify(out)) ;
+                    qnabot.log(out) ;
                     throw new Respond({
                         version:'1.0',
                         response: _.get(out,"session.cachedOutput",{outputSpeech:{type:"PlainText",text:welcome_message},shouldEndSession:false})

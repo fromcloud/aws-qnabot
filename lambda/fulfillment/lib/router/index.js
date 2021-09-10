@@ -13,7 +13,7 @@ module.exports=class router {
             var res=await this._walk( {_event:event})
             callback(null,res)
         }catch(e){
-            qnabot.log("throwing response:",JSON.stringify(e))
+            qnabot.log("throwing response:",e)
             if(e.action==='END'){
                 callback(null)
             }else if(e.action==="RESPOND"){

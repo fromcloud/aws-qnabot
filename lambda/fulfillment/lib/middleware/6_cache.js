@@ -8,10 +8,10 @@ const qnabot = require("/opt/lib/logging")
 
 module.exports=async function cache(req,res){
     qnabot.log("Entering Cache Middleware")
-    qnabot.log("response:" + JSON.stringify(res))
+    qnabot.log("response:",res)
     if(_.has(res,"out.response")){
         res.out.sessionAttributes.cachedOutput= res.out.response
     }
-    qnabot.log("edited response:" + JSON.stringify(res))
+    qnabot.log("edited response:",res)
     return {req,res}
 }

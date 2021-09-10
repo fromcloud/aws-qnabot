@@ -95,7 +95,7 @@ async function lambdaClientRequester(name, req) {
         Payload: JSON.stringify(payload)
     }).promise();
     let obj = JSON.parse(result.Payload);
-    qnabot.log("lambda payload obj is : " + JSON.stringify(obj,null,2));
+    qnabot.log("lambda payload obj is : " ,obj);
     return obj;
 }
 
@@ -113,7 +113,7 @@ function lexClientRequester(lexClient,params) {
                 reject('Lex client request error:' + err);
             }
             else {
-                qnabot.log("Lex client response:" + JSON.stringify(data, null, 2));
+                qnabot.log("Lex client response:",data);
                 resolve(data);
             }
         });
@@ -135,7 +135,7 @@ async function handleRequest(req, res, botName, botAlias) {
         const lambdaName = botName.split("::")[1];
         qnabot.log("Calling Lambda:", lambdaName);
         let response = await lambdaClientRequester(lambdaName, req);
-        qnabot.log("lambda response: " + JSON.stringify(response,null,2));
+        qnabot.log("lambda response: ",response);
         return response;
     } else {
         function mapFromSimpleName(botName) {
@@ -197,24 +197,24 @@ function endUseOfSpecialtyBot(req, res, welcomeBackMessage) {
  * @returns {Promise<{}>}
  */
 async function processResponse(req, res, hook, alias) {
-    qnabot.log('specialtyBotRouter request: ' + JSON.stringify(req, null, 2));
-    qnabot.log('specialtyBotRouter response: ' + JSON.stringify(res, null, 2));
+    qnabot.log('specialtyBotRouter request: ',req);
+    qnabot.log('specialtyBotRouter response: ',res);
     const welcomeBackMessage = _.get(req._settings, 'BOT_ROUTER_WELCOME_BACK_MSG', 'Welcome back to QnABot.');
     const exitResponseDefault = _.get(req._settings, 'BOT_ROUTER_EXIT_MSGS', 'exit,quit,goodbye,leave');
     let exitResponses = exitResponseDefault.split(',');
     exitResponses.map(entry => entry.trim());
     let currentUtterance = req.question.toLowerCase();
     qnabot.log(`current utterance: ${currentUtterance}`);
-    qnabot.log('exit responses are: ' + JSON.stringify(exitResponses,null,2));
+    qnabot.log('exit responses are: ',exitResponses);
     if (_.indexOf(exitResponses, currentUtterance)>=0) {
         qnabot.log('user provided exit response given');
         let resp = endUseOfSpecialtyBot(req, res, welcomeBackMessage);
         resp.res = await translate_res(resp.req, resp.res);
-        qnabot.log("returning resp for user requested exit: " + JSON.stringify(resp,null,2));
+        qnabot.log("returning resp for user requested exit: ",resp);
         return resp;
     } else {
         let botResp = await handleRequest(req, res, hook, alias);
-        qnabot.log("specialty botResp: " + JSON.stringify(botResp, null, 2));
+        qnabot.log("specialty botResp: ",botResp);
         let lexBotIsFulfilled = false;
         if (botResp.message || _.get(botResp,'dialogState', "") === 'ReadyForFulfillment') {
             if (_.get(botResp,'dialogState', "") === 'ReadyForFulfillment') {

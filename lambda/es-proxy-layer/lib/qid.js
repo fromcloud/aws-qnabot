@@ -36,14 +36,14 @@ module.exports=function(event,context,callback){
             break;
     }
     
-    qnabot.log("ElasticSearch Query",JSON.stringify(query,null,2))
+    qnabot.log("ElasticSearch Query",query)
     return request({
         url:url.resolve(`https://${process.env.ES_ADDRESS}`,`/${process.env.ES_INDEX}/_search`),
         method:"GET",
         body:query
     })
     .then(function(result){
-        qnabot.log("ES result:"+JSON.stringify(result,null,2))
+        qnabot.log("ES result:",result)
         callback(null,_.get(result,"hits.hits[0]._source",{}))
     })
     .catch(callback)

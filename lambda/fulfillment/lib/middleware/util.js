@@ -20,8 +20,6 @@ exports.invokeLambda=async function(params){
         req:params.req,
         res:params.res
     })
-    qnabot.log("payload")
-    qnabot.log(payload)
     var result=await lambda.invoke({
         FunctionName:params.FunctionName,
         InvocationType:params.InvocationType || "RequestResponse",
@@ -33,7 +31,7 @@ exports.invokeLambda=async function(params){
         try{
             if(result.Payload){
                 var parsed=JSON.parse(result.Payload)
-                qnabot.log("Response",JSON.stringify(parsed,null,2))
+                qnabot.log("Response",parsed)
                 return parsed
             }
         }catch(e){

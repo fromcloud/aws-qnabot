@@ -23,7 +23,6 @@ async function get_translation(englishText, targetLang, req) {
     const translateClient = new AWS.Translate();
     try {
         var customTerminologyEnabled = _.get(req._settings, "ENABLE_CUSTOM_TERMINOLOGY") == true;
-        qnabot.log("get translation request " + JSON.stringify(req))
 
         const params = {
             SourceLanguageCode: 'en', /* required */
@@ -57,7 +56,7 @@ function replaceAll(str, find, replace) {
 }
 
 exports.translate_hit = async function(hit,usrLang,req){
-    qnabot.log("translate_hit:", JSON.stringify(hit,null,2));
+    qnabot.log("translate_hit:",hit);
     let hit_out = _.cloneDeep(hit);
     let a = _.get(hit, "a");
     let markdown = _.get(hit, "alt.markdown");

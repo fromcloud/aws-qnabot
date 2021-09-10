@@ -74,7 +74,7 @@ function lexV1ClientRequester(params) {
                 reject('Lex client request error:' + err);
             }
             else {
-                qnabot.log("Lex client response:" + JSON.stringify(data, null, 2));
+                qnabot.log("Lex client response:",data);
                 resolve(data);
             }
         });
@@ -90,7 +90,7 @@ function lexV2ClientRequester(params) {
                 reject('Lex client request error:' + err);
             }
             else {
-                qnabot.log("Lex client response:" + JSON.stringify(data, null, 2));
+                qnabot.log("Lex client response:",data);
                 resolve(data);
             }
         });
@@ -167,9 +167,9 @@ async function handleRequest(req, res, botName, botAlias) {
                 text: respText
 
             };
-            qnabot.log("Lex V2 parameters: " + JSON.stringify(params));
+            qnabot.log("Lex V2 parameters: ",params);
             const lexv2response = await lexV2ClientRequester(params); 
-            qnabot.log("Lex V2 response: " + JSON.stringify(lexv2response));
+            qnabot.log("Lex V2 response: ",lexv2response);
             response.message = _.get(lexv2response, 'messages[0].content', '');
             // lex v2 FallbackIntent match means it failed to fill desired slot(s).
             if (lexv2response.sessionState.intent.name === "FallbackIntent" || 
@@ -190,7 +190,7 @@ async function handleRequest(req, res, botName, botAlias) {
                 inputText: respText,
                 userId: tempBotUserID,
             };
-            qnabot.log("Lex V1 parameters: " + JSON.stringify(params));
+            qnabot.log("Lex V1 parameters: " ,params);
             response = await lexV1ClientRequester(params);
         }
         return response;
@@ -229,7 +229,7 @@ async function processResponse(req, res, hook, msg) {
     const elicit_Response_Retry_Message = _.get(req, '_settings.ELICIT_RESPONSE_RETRY_MESSAGE', "Please try again?");
 
     let botResp = await handleRequest(req, res, hook, "live");
-    qnabot.log("botResp: " + JSON.stringify(botResp,null,2));
+    qnabot.log("botResp: ",botResp);
     var plainMessage = botResp.message;
     var ssmlMessage = undefined;
     // if messsage contains SSML tags, strip tags for plain text, but preserve tags for SSML 

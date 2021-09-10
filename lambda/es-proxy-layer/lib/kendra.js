@@ -25,7 +25,6 @@ function confidence_filter(minimum_score,kendra_result){
         return true;
     }
     confidences = confidences.slice(index)
-    qnabot.log("Testing confidences: Allowed - " + JSON.stringify(confidences) + " Actual - " + _.get(kendra_result,"ScoreAttributes.ScoreConfidence") )
     const found = confidences.find(element => element == _.get(kendra_result,"ScoreAttributes.ScoreConfidence")) != undefined
     return found
 }
@@ -51,7 +50,7 @@ function create_hit(answermessage,markdown,ssml,hit_count,debug_results,kendra){
                 }
 
 
-    qnabot.log("create_hit" +JSON.stringify(hits))
+    qnabot.log("create_hit",hits)
     return hit_count > 0 ? hits : undefined;
 }
 
@@ -116,7 +115,6 @@ function kendraRequester(kendraClient,params,resArray) {
             }
             else {
                 data.originalKendraIndexId = indexId;
-                qnabot.log("Data from Kendra request:" + JSON.stringify(data, null, 2));
                 resArray.push(data);
                 resolve(data);
             }
@@ -302,7 +300,7 @@ async function routeKendraRequest(event, context) {
                 var data = kendraResultsCached
                 _.set(event.req, "kendraResultsCached", "cached and retrieved");  // cleans the logs
                 data.originalKendraIndexId = index;
-                qnabot.log("Data from Kendra request:" + JSON.stringify(data,null,2));
+                qnabot.log("Data from Kendra request:",data);
                 resArray.push(data);
                 resolve(data);
             }));
@@ -548,13 +546,13 @@ async function routeKendraRequest(event, context) {
         kendraFoundDocumentCount: foundDocumentCount,
         maxDocuments: maxDocumentCount
     })
-    qnabot.log("Returning event: ", JSON.stringify(hit, null, 2));
+    qnabot.log("Returning event: ", hit);
 
     return hit;
 }
 
 exports.handler = async (event, context) => {
-    qnabot.log("event: " + JSON.stringify(event, null, 2));
+    qnabot.log("event: ",event);
     return routeKendraRequest(event, context);
 };
 

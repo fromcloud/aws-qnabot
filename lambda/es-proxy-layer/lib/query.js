@@ -29,7 +29,7 @@ async function run_query(req, query_params) {
     else {
         response= await run_query_es(req, query_params);
     }
-    qnabot.log(`response ${JSON.stringify(response)}` )
+    qnabot.log(`response`,response )
     return response;
 }
 
@@ -145,7 +145,7 @@ async function invokeLambda (lambdaRef, req, res) {
     } catch (e) {
         // response is not JSON - noop
     }
-    qnabot.log("Lambda returned payload: ", JSON.stringify(payload));
+    qnabot.log("Lambda returned payload: ",payload));
     return [req, res, payload];
 }
 
@@ -222,7 +222,7 @@ async function get_hit(req, res) {
     };
     var no_hits_question = _.get(req, '_settings.ES_NO_HITS_QUESTION', 'no_hits');
     var response = await run_query(req, query_params);
-    qnabot.log("Query response: ", JSON.stringify(response,null,2));
+    qnabot.log("Query response: ", response);
     var hit = _.get(response, "hits.hits[0]._source");
     
     _.set(res, "kendraResultsCached", response.kendraResultsCached);
@@ -243,9 +243,9 @@ async function get_hit(req, res) {
     if (hit) {
         res['got_hits'] = 1;  // response flag, used in logging / kibana
     } else if(query_params.kendra_indexes.length != 0) {
-        qnabot.log("request entering kendra fallback " + JSON.stringify(req))
+        qnabot.log("request entering kendra fallback ",req)
         hit = await  kendra_fallback.handler({req,res})
-        qnabot.log("Result from Kendra " + JSON.stringify(hit))
+        qnabot.log("Result from Kendra ",hit)
         if(hit &&  hit.hit_count != 0)
         {
             _.set(res,"answersource","Kendra Fallback");
@@ -267,11 +267,11 @@ async function get_hit(req, res) {
 
         hit = _.get(response, "hits.hits[0]._source");
 
-        qnabot.log("No hits response: " + JSON.stringify(hit))
+        qnabot.log("No hits response: ",hit)
     }
     // Do we have a hit?
     if (hit) {
-        qnabot.log("Setting topic for " + JSON.stringify(hit))
+        qnabot.log("Setting topic for " ,hit)
         // set res topic from document before running handlebars, so that handlebars can access or overwrite it.
          _.set(res, "session.topic", _.get(hit, "t"));
         
@@ -348,9 +348,9 @@ async function get_hit(req, res) {
  * @returns {Promise<*>}
  */
 async function evaluateConditionalChaining(req, res, hit, conditionalChaining) {
-    qnabot.log("evaluateConditionalChaining req: ", JSON.stringify(req, null, 2));
-    qnabot.log("evaluateConditionalChaining res: ", JSON.stringify(res, null, 2));
-    qnabot.log("evaluateConditionalChaining hit: ", JSON.stringify(hit, null, 2));
+    qnabot.log("evaluateConditionalChaining req: ", req);
+    qnabot.log("evaluateConditionalChaining res: ", res);
+    qnabot.log("evaluateConditionalChaining hit: ", hit);
     // decrypt conditionalChaining
     conditionalChaining = encryptor.decrypt(conditionalChaining);
     qnabot.log("Decrypted Chained document rule specified:", conditionalChaining);
@@ -573,7 +573,6 @@ module.exports = async function (req, res) {
             }
         }
         // prepend debug msg
-        qnabot.log("pre-debug " +JSON.stringify(req))
         if (_.get(req._settings, 'ENABLE_DEBUG_RESPONSES')) {
             var msg = "User Input: \"" + req.question + "\"";
 
@@ -608,6 +607,6 @@ module.exports = async function (req, res) {
     res.session.qnabot_gotanswer = (res['got_hits'] > 0) ? true : false ;
 
     var event = {req, res} ;
-    qnabot.log("RESULT", JSON.stringify(event));
+    qnabot.log("RESULT", event);
     return event ;
 };

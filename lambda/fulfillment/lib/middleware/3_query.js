@@ -36,8 +36,8 @@ const qnabot = require("/opt/lib/logging")
  * @returns {Promise<any>}
  */
 module.exports=async function query(req,res) {
-    qnabot.log("Entry REQ:", JSON.stringify(req, null, 2));
-    qnabot.log("Entry RES:", JSON.stringify(res, null, 2));
+    qnabot.log("Entry REQ:", req);
+    qnabot.log("Entry RES:", res);
 
     /* These session variables may exist from a prior interaction with QnABot. They are
        used to control behavior of this function and divert the function away from the normal
@@ -70,14 +70,14 @@ module.exports=async function query(req,res) {
 
                 // specialtyBot processing is done. Remove the flag for now.
                 _.set(postQuery, 'res.session.qnabotcontext.specialtyBotProgress', undefined);
-                qnabot.log("After chaining the following response is being made: " + JSON.stringify(postQuery,null,2));
+                qnabot.log("After chaining the following response is being made: ",postQuery);
                 return postQuery;
             } else {
                 // no chaining. continue on with response from standard fulfillment path.
                 _set(res,'session.qnabotcontext.specialtyBotProgress', undefined);
             }
         }
-        qnabot.log("No chaining. The following response is being made: " + JSON.stringify(resp,null,2));
+        qnabot.log("No chaining. The following response is being made: " ,resp);
         return resp;
     } else if (elicitResponse) {
         qnabot.log('Handling elicitResponse');
@@ -94,14 +94,14 @@ module.exports=async function query(req,res) {
 
                 // elicitResponse processing is done. Remove the flag for now.
                 _.set(postQuery,'res.session.qnabotcontext.elicitResponse.progress',undefined);
-                qnabot.log("After chaining the following response is being made: " + JSON.stringify(postQuery,null,2));
+                qnabot.log("After chaining the following response is being made: ",postQuery);
                 return postQuery;
             } else {
                 // no chaining. continue on with response from standard fulfillment path.
                 _.set(res,'session.qnabotcontext.elicitResponse.progress',undefined);
             }
         }
-        qnabot.log("No chaining. The following response is being made: " + JSON.stringify(resp,null,2));
+        qnabot.log("No chaining. The following response is being made: ");
         return resp;
     }
 
@@ -167,6 +167,6 @@ module.exports=async function query(req,res) {
         _.set(postQuery,'res.session.qnabotcontext.specialtyBotAlias', specialtybot_alias);
     }
 
-    qnabot.log("Standard path return from 3_query: " + JSON.stringify(postQuery, null, 2));
+    qnabot.log("Standard path return from 3_query: " ,postQuery);
     return postQuery;
 }

@@ -199,8 +199,9 @@ Handlebars.registerHelper('randomPick', function () {
 
 var apply_handlebars = async function (req, res, hit) {
     qnabot.log("apply handlebars");
-    qnabot.log('req is: ' + JSON.stringify(req,null,2));
-    qnabot.log('res is: ' + JSON.stringify(res,null,2));
+
+    qnabot.log('req is: ',req);
+    qnabot.log('res is: ',res);
     res_glbl = res; // shallow copy - allow modification by setSessionAttr helper
     req_glbl = req; // shallow copy - allow sessionAttributes retrieval by ifLang helper
     _.set(req_glbl._event, 'errorFound', false);

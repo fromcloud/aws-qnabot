@@ -25,7 +25,7 @@ function sendDelete(indexName,timeBack,callback) {
                     "lt" : `now-${timeBack}m`
                 })
             .build()
-    qnabot.log("ElasticSearch Query",JSON.stringify(query,null,2))
+    qnabot.log("ElasticSearch Query",query)
     qnabot.log("Got Here cleanmetrics")
     return request({
         url:url.resolve(`https://${process.env.ES_ADDRESS}`,`/${process.env.ES_INDEX}-${indexName}/_delete_by_query`),
@@ -33,7 +33,7 @@ function sendDelete(indexName,timeBack,callback) {
         body:query
     })
     .then(function(result){
-        qnabot.log("ES result:"+JSON.stringify(result,null,2))
+        qnabot.log("ES result:",result)
         callback(null,_.get(result,"hits.hits[0]._source",{}))
     })
     .catch(callback)
