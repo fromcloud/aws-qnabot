@@ -145,7 +145,7 @@ async function invokeLambda (lambdaRef, req, res) {
     } catch (e) {
         // response is not JSON - noop
     }
-    qnabot.log("Lambda returned payload: ",payload));
+    qnabot.log("Lambda returned payload: ",payload);
     return [req, res, payload];
 }
 
