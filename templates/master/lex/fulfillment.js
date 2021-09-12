@@ -14,7 +14,7 @@ var responsebots = _.fromPairs(require('../../examples/examples/responsebots-lex
     return [x, { "Fn::GetAtt": ["ExamplesStack", `Outputs.${x}`] }]
   }))
 
-const filesToHash = ['fulfillment.zip', 'es-proxy-layer.zip','common-modules-layer.zip','aws-sdk-layer.zip']
+const filesToHash = ['fulfillment.zip', 'es-proxy-layer.zip','common-modules-layer.zip','aws-sdk-layer.zip','qnabot-common-layer.zip']
 const comboHash = filesToHash.map(x => {
     let filePath = (fs.existsSync("../../build/lambda/" + x) ? "../../" : "./") + "build/lambda/" + x
     let fileBuffer = fs.readFileSync(filePath);
