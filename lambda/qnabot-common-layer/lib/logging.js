@@ -44,3 +44,30 @@ const filter = text => {
         return text
     }
 };
+
+messages={
+    "glossary": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "title": "S",
+			"GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Standard Generalized Markup Language",
+					"Acronym": "SGML",
+					"Abbrev": "ISO 8879:1986",
+					"GlossDef": {
+                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+						"GlossSeeAlso": ["GML", "XML"]
+                    },
+					"GlossSee": "markup"
+                }
+            }
+        }
+    }
+}
+// messages=JSON.stringify(messages,null,2)
+// process.env.found_comprehend_pii = "title,GlossEntry"
+// process.env.QNAREDACT = "true"
+// filter(messages)

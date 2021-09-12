@@ -112,7 +112,7 @@ async function get_es_query(event, settings) {
 
 
 async function run_query_es(event, settings) {
-    qnabot.log("ElasticSearch Query",es_query);
+    qnabot.log("ElasticSearch Query",JSON.stringify(es_query,null,2));
     var es_query = await get_es_query(event, settings);
     var es_response = await request({
         url:Url.resolve("https://"+event.endpoint,event.path),
@@ -146,7 +146,7 @@ async function run_query_kendra(event, kendra_index) {
 module.exports= async (event, context, callback) => {
     //try {
         var settings = await get_settings();
-        qnabot.log('Received event:', event);
+        qnabot.log('Received event:', JSON.stringify(event, null, 2));
 
         var kendra_index = _.get(settings, "KENDRA_FAQ_INDEX")
         event.minimum_score = _.get(settings, 'ALT_SEARCH_KENDRA_FAQ_CONFIDENCE_SCORE', "MEDIUM")
@@ -165,7 +165,7 @@ module.exports= async (event, context, callback) => {
             var response = await run_query_es(event, settings);
         }
         
-        qnabot.log("Query response: ",response);
+        qnabot.log("Query response: ", JSON.stringify(response,null,2));
         return callback(null, response);
     // } catch (error) {
     //     qnabot.log(`error is ${JSON.stringify(error, null,2)}`);

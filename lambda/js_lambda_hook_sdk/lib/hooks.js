@@ -47,7 +47,7 @@ module.exports = {
     },
 
     get_args: function (event) {
-        var args = _.get(event, "res.result.args");
+        var args = _.get(event, "res.result.args",[]);
         let results = [];
         args.forEach(element => {
             if (_isJson(element)) {
@@ -120,6 +120,7 @@ module.exports = {
                 value: isQID ? "QID::" + value : value
             });
         }
+        _.set(event,"res.card.send",true)
         return this.list_response_card_buttons(event)
     },
 
@@ -144,17 +145,23 @@ module.exports = {
 
     set_response_card_imageurl: function (event, url) {
         _.set(event, "res.card.imageUrl", url)
+        _.set(event,"res.card.send",true)
+
     },
 
     get_response_card_imageurl: function (event) {
         _.get(event, "res.card.imageUrl", undefined)
     },
 
-    set_response_card_title: function (event, title, overwrrite = true) {
-        let card = _.get(event, "res.card.title", undefined)
-        if (!card || (card && overwrrite)) {
+    set_response_card_title: function (event, title, overwrite = true) {
+        title = _.get(event, "res.card.title", undefined)
+        if (title === undefined || title === "") {
             _.set(event, "res.card.title", title)
         }
+        if(overwrite){
+            _.set(event, "res.card.title", title)
+        }
+        _.set(event,"res.card.send",true)
         return _.get(event, "res.card.title")
     },
 

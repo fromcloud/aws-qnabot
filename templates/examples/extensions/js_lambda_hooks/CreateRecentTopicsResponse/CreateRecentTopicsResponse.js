@@ -75,10 +75,11 @@ exports.handler = async function (event, context) {
     end = args.end != undefined ? args.end : end;
   }
 
-  hook.set_response_card_title("Recent Topics", false)
+  hook.set_response_card_title(event,"Recent Topics", false)
 
   let buttons = create_buttons(event,start,end)
   buttons.forEach(index => hook.add_response_card_button(index.event, index.description, index.qid, true, true))
-
+  event.res.card.send = true
+  event.res.card.title = "Recent Topics"
   return hook.validate_response(event);
 };
