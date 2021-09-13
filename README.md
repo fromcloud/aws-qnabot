@@ -140,7 +140,7 @@ See the [LICENSE.md](LICENSE.md) file for details
 ### Version 4.7.4
 
 - QnABot now uses the official [Kendra Web Crawler](https://docs.aws.amazon.com/kendra/latest/dg/data-source-web-crawler.html) instead of the built in "web indexer".See the updated [documentation](./docs/kendra_crawler_guide/README.md) for more information.
-- [Client Filtering](./docs/client-filter/README.md) has been added.  This feature allows QnABot to answer the same set of questions differently based on information known about the client
+- [Client Filtering](./docs/client_filter/README.md) has been added.  This feature allows QnABot to answer the same set of questions differently based on information known about the client
 such as the web page where QnABot is hosted or the type of contact calling in through Connect.
 - New setting - ALT_SEARCH_KENDRA_RESPONSE_TYPES - to allow Kendra responses to be filtered based on [Response Types](https://docs.aws.amazon.com/kendra/latest/dg/response-types.html).
 - New setting - ALT_SEARCH_KENDRA_ABBREVIATE_MESSAGE_FOR_SSML - Kendra will return an abbreviated response when set to "true" when used with a voice channel such as Amazon Connect, which is the current behavior.  
