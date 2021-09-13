@@ -27,7 +27,7 @@ STACKNAME="aws-cloud9-$ENVIRONMENT_NAME-$CLOUD9_ID"
 
 # Wait for the Cloud 9 instance to be created
 CLOUD9_STATUS=""
-while [[ $CLOUD9_STATUS != ready  &&  $CLOUD9_STATUS != error  ]]; do CLOUD9_STATUS=$(aws cloud9 describe-environment-status --environment-id $CLOUD9_ID | jq -r ".status");ECHO "WAITING...";sleep 10; done
+while [[ $CLOUD9_STATUS != ready  &&  $CLOUD9_STATUS != error  ]]; do CLOUD9_STATUS=$(aws cloud9 describe-environment-status --environment-id $CLOUD9_ID | jq -r ".status");echo "WAITING...";sleep 10; done
 
 #Check to make sure it was successfully created
 #If status == error, Go to the CloudFormation page in the AWS console and find the stack printed below.
