@@ -42,7 +42,7 @@ Excel Column | Content Designer Field
 clientFilterValues | Client Filter Values
 
 
-### Examples of nested fields:
+### Examples of nested fields
 
 ![Schema snippet](schema.png)
 
