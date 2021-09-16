@@ -63,7 +63,7 @@ def handler(event, context):
     IndexId = settings['KENDRA_WEB_PAGE_INDEX']
     URLs = settings['KENDRA_INDEXER_URLS'].replace(' ', '').split(',')
     schedule = settings["KENDRA_INDEXER_SCHEDULE"]
-
+    crawler_mode = settings["KENDRA_INDEXER_CRAWL_MODE"].upper()
     schedule = create_cron_expression(schedule)
     if schedule == "INVALID":
         schedule = ""
@@ -71,11 +71,11 @@ def handler(event, context):
     data_source_id = get_data_source_id(IndexId, Name)
 
     if data_source_id is None:
-        data_source_id = kendra_create_data_source(client, IndexId, Name, Type, RoleArn, Description, URLs, schedule)
+        data_source_id = kendra_create_data_source(client, IndexId, Name, Type, RoleArn, Description, URLs, schedule, crawler_mode)
         kendra_sync_data_source(IndexId, data_source_id)
         create_dashboard(IndexId, data_source_id)
     else:
-        kendra_update_data_source(IndexId, data_source_id, URLs, RoleArn, schedule)
+        kendra_update_data_source(IndexId, data_source_id, URLs, RoleArn, schedule, crawler_mode)
         kendra_sync_data_source(IndexId, data_source_id)
     return {"IndexId": IndexId, "DataSourceId": data_source_id}
 
@@ -107,7 +107,7 @@ def get_data_source_id(index_id, data_source_name):
     return None
 
 
-def kendra_create_data_source(client, IndexId, Name, Type, RoleArn, Description, URLs,schedule):
+def kendra_create_data_source(client, IndexId, Name, Type, RoleArn, Description, URLs,schedule,crawler_mode):
     response = client.create_data_source(
         Name=Name,
         IndexId=IndexId,
@@ -120,7 +120,7 @@ def kendra_create_data_source(client, IndexId, Name, Type, RoleArn, Description,
                 'Urls': {
                     'SeedUrlConfiguration': {
                         'SeedUrls': URLs,
-                        'WebCrawlerMode': 'EVERYTHING'
+                        'WebCrawlerMode':crawler_mode
                     }
                 },
                 'CrawlDepth': 2
@@ -140,18 +140,18 @@ def kendra_sync_data_source(IndexId, data_source_id):
     return response
 
 
-def kendra_update_data_source(IndexId, data_source_id, URLs, RoleArn,schedule):
+def kendra_update_data_source(IndexId, data_source_id, URLs, RoleArn, schedule, crawler_mode):
     response = client.update_data_source(
         Id=data_source_id,
         RoleArn=RoleArn,
-        Schedule = schedule,
+        Schedule= schedule,
         IndexId=IndexId,
         Configuration={
             'WebCrawlerConfiguration': {
                 'Urls': {
                     'SeedUrlConfiguration': {
                         'SeedUrls': URLs,
-                        'WebCrawlerMode': 'EVERYTHING'
+                        'WebCrawlerMode': crawler_mode
                     }
                 },
                 'CrawlDepth': 2
