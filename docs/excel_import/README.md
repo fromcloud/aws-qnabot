@@ -36,12 +36,13 @@ can be imported by specifying the JSON path as the column.
 ### Example of a field on the root level
 
 ![Schema snippet](schema2.png)
+
 Excel Column | Content Designer Field
 -------------|-----------------------
 clientFilterValues | Client Filter Values
 
 
-### Examples of nested fields:
+### Examples of nested fields
 
 ![Schema snippet](schema.png)
 
