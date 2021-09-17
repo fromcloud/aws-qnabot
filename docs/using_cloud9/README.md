@@ -89,6 +89,30 @@ nvm install v12
 
 And now install the latest version of [npm](https://www.npmjs.com/).
 
-```
+```bash
 npm install latest-version
+```
+
+## Initialize the environment
+
+```bash
+git clone https://github.com/aws-samples/aws-ai-qna-bot.git
+```
+
+Follow the steps in the main readme [Clone the git repo and build a version](https://github.com/aws-samples/aws-ai-qna-bot#clone-the-git-repo-and-build-a-version)
+
+## Alternate QnABot Deployment using CloudFormation 
+
+As an alternative to using ```npm run up``` and ```npm run update``` to deploy QnABot, you can use ```cloudformation deploy```.
+
+This will let you choose your stack name instead of having a stack name appended with ```-dev-master```
+
+After you run ```npm run bootstrap``` following the instrction above:
+
+```bash
+BUCKET=<YOUR S3 Bootstrap Bucket Name>
+
+npm run upload
+
+aws cloudformation deploy --template-file build/templates/master.json --stack-name testcf --region us-east-1 --s3-bucket $BUCKET --parameter-overrides BootstrapBucket=$BUCKET BootstrapPrefix=artifacts/aws-ai-qna-bot Email=admin@example.com  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
 ```
