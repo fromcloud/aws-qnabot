@@ -39,7 +39,7 @@ can be imported by specifying the JSON path as the column.
 
 Excel Column | Content Designer Field
 -------------|-----------------------
-clientFilterValues | Client Filter Values
+clientFilterValues | Client Filter: Values
 
 
 ### Examples of nested fields
