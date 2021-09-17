@@ -98,6 +98,7 @@ const axios = require('axios')
 const parseJson = require('json-parse-better-errors')
 var XLSX = require("xlsx")
 const _ = require('lodash')
+const stringify=require('json-stringify-pretty-compact')
 
 module.exports = {
   data: function () {
@@ -299,6 +300,7 @@ module.exports = {
         "Answer": "a",
         ssml: "alt.ssml",
       };
+
       var self = this;
       try {
         const enc = new TextDecoder('utf-8')
@@ -318,7 +320,9 @@ module.exports = {
         var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
         var json_object = JSON.stringify(XL_row_object);
         var question_number = 1
+        
         XL_row_object.forEach(question =>{
+
            console.log("Processing " + JSON.stringify(question))
            for(const property in header_mapping){
              var dest_property = header_mapping[property]
@@ -328,16 +332,20 @@ module.exports = {
                 delete question[property]
              }
            }
+
            question_number++
           if(question["cardtitle"] != undefined){
             console.log("processing response title")
             question.r = {}
             question.r.title = question["cardtitle"]
+            delete question["cardtitle"]
             if(question["imageurl"] != undefined){
               question.r.imageUrl = question.imageurl
+              delete question.imageurl
             }
             if(question["cardsubtitle"] != undefined){
               question.r.subTitle = question.subtitle
+              delete question["cardsubtitle"] 
             }
             question.r.buttons = []
             let i = 1
@@ -373,19 +381,30 @@ module.exports = {
               }
               console.log("Adding button "+ JSON.stringify(button))
               question.r.buttons.push(button)
+              delete question[buttonFieldTextName]
+              delete question[buttonFieldValueName]
+
              }
            }
            let counter = 1
            question.q = question.q == undefined ? [] : question.q
+
            while(true){
              var userQuestion = question["question"+counter] 
               if(userQuestion != undefined){
                 question.q.push(userQuestion)
+                delete question["question"+counter]
                 counter++
               }else{
                 break;
               }
            }
+          for(let property in question){
+            if(property.includes(".")){
+              _.set(question,property.split("."),question[property])
+              
+            }
+          }
           if(question.qid  == undefined){
             self.addError(`Warning: No QID found for line ${question_number}. The question will be skipped.`)
             return

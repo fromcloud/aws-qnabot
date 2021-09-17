@@ -46,7 +46,7 @@ clientFilterValues | Client Filter: Values
 
 ![Schema snippet](schema.png)
 
-Excel Column | Content Designer Field 
+Excel Column | Content Designer Field (title in the schema.json) 
 -------------|------------------------
 elicitResponse.response_hooks | Elicit Response: Responsebot Hook
 elicitResponse.response_sessionattr_namespace |  Response Session Attribute Namespace
