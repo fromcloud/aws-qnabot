@@ -114,5 +114,5 @@ BUCKET=<YOUR S3 Bootstrap Bucket Name>
 
 npm run upload
 
-aws cloudformation deploy --template-file build/templates/master.json --stack-name testcf --region us-east-1 --s3-bucket $BUCKET --parameter-overrides BootstrapBucket=$BUCKET BootstrapPrefix=artifacts/aws-ai-qna-bot Email=admin@example.com  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+aws cloudformation deploy --template-file build/templates/master.json --stack-name <YOUR STACKNAME> --region us-east-1 --s3-bucket $BUCKET --parameter-overrides BootstrapBucket=$BUCKET BootstrapPrefix=artifacts/aws-ai-qna-bot Email=admin@example.com  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
 ```
