@@ -107,7 +107,7 @@ As an alternative to using ```npm run up``` and ```npm run update``` to deploy Q
 
 This will let you choose your stack name instead of having a stack name appended with ```-dev-master```
 
-After you run ```npm run bootstrap``` following the instrction above:
+After you run ```npm run bootstrap``` following the instructions above:
 
 ```bash
 BUCKET=<YOUR S3 Bootstrap Bucket Name>
