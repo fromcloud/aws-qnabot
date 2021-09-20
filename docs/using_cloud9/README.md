@@ -94,6 +94,7 @@ npm install latest-version
 
 ```bash
 git clone https://github.com/aws-samples/aws-ai-qna-bot.git
+sudo yum install jq
 ```
 
 Follow the steps in the main readme [Clone the git repo and build a version](https://github.com/aws-samples/aws-ai-qna-bot#clone-the-git-repo-and-build-a-version)
@@ -104,12 +105,27 @@ As an alternative to using ```npm run up``` and ```npm run update``` to deploy Q
 
 This will let you choose your stack name instead of having a stack name appended with ```-dev-master```
 
-After you run ```npm run bootstrap``` following the instrction above:
+After you run ```npm run bootstrap``` following the instructions above:
 
 ```bash
 BUCKET=<YOUR S3 Bootstrap Bucket Name>
 
 npm run upload
 
-aws cloudformation deploy --template-file build/templates/master.json --stack-name testcf --region us-east-1 --s3-bucket $BUCKET --parameter-overrides BootstrapBucket=$BUCKET BootstrapPrefix=artifacts/aws-ai-qna-bot Email=admin@example.com  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+aws cloudformation deploy --template-file build/templates/master.json --stack-name <YOUR STACKNAME> --region us-east-1 --s3-bucket $BUCKET --parameter-overrides BootstrapBucket=$BUCKET BootstrapPrefix=artifacts/aws-ai-qna-bot Email=admin@example.com  --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+```
+
+## Creating additional Content Designer administrators
+
+You can create additional Content Designer admins by running the following commands
+
+
+```bash
+export STACKNAME=<YOUR QnABot Stack Name>
+
+COGNITO_USERPOOL=$(aws cloudformation describe-stack-resource  --stack-name $STACKNAME --logical-resource-id UserPool | jq -r ".StackResourceDetail.PhysicalResourceId")
+
+aws cognito-idp admin-create-user --user-pool-id $COGNITO_USERPOOL --username <username> --user-attributes Name=email,Value=<email address> Name="email_verified",Value="true"  --desired-delivery-mediums EMAIL
+
+aws cognito-idp admin-add-user-to-group --user-pool-id $COGNITO_USERPOOL --username <username> --group-name Admins
 ```
