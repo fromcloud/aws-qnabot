@@ -10,7 +10,6 @@ Log into the AWS Console and click on the Cloudshell icon.
 
 ![CloudShell](./cloudshell.png)
 
-
 ## Creating the Cloud 9 environment
 
 If you have made changes to your [default VPC settings](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html), deleted your default VPC or the script below does not work, please [see the requirements for Cloud 9](https://docs.aws.amazon.com/cloud9/latest/user-guide/vpc-settings.html).
@@ -37,8 +36,7 @@ echo $STACKNAME
 
 ```
 
-## Increasing the storage of the volume attached to the AWS Cloud 9 instance.
-
+## Increasing the storage of the volume attached to the AWS Cloud 9 instance
 
 The following set of bash commands will resize the volume attached to your Cloud 9 instance.  
 
@@ -46,11 +44,11 @@ The following set of bash commands will resize the volume attached to your Cloud
 
 If you were able to run the bash commands above, the $STACKNAME will already be defined.  If you had to create the Cloud 9 environmnent manually, set the STACKNAME variable before running the commands below to increase the size of the volume. The name of the CloudFormation stack will start with "aws-cloud9"
 
-```
+```bash
 STACKNAME=aws-cloud9....
 ```
 
-### Resize the attached volume and reboot your instance.
+### Resize the attached volume and reboot your instance
 
 ```bash
 # Cloud 9 by default creates an environment with 10GB of storage.  QnABot requires more. 
@@ -76,7 +74,6 @@ aws ec2 reboot-instances --instance-ids $INSTANCE_ID
 
 Log into your AWS Account and go to [AWS Cloud 9 Service home page](https://console.aws.amazon.com/cloud9/home#). Choose "Open IDE".
 
-
 QnABot requires [Node v12](https://nodejs.org/en/about/releases/).  
 
 Check to see which version of Node installed by typing ```node -v``` in the terminal.  If the version is not 12, type the folowing commands
@@ -101,7 +98,7 @@ git clone https://github.com/aws-samples/aws-ai-qna-bot.git
 
 Follow the steps in the main readme [Clone the git repo and build a version](https://github.com/aws-samples/aws-ai-qna-bot#clone-the-git-repo-and-build-a-version)
 
-## Alternate QnABot Deployment using CloudFormation 
+## Alternate QnABot Deployment using CloudFormation
 
 As an alternative to using ```npm run up``` and ```npm run update``` to deploy QnABot, you can use ```cloudformation deploy```.
 
