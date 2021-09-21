@@ -15,14 +15,14 @@ function processKeysForRegEx(obj, re) {
         if (_.isPlainObject(val)) {
             processKeysForRegEx(val, re);
         } else if ( key === "slot") {
-            obj[key] = qnabot.filter_comprehend_pii(val.replace(re,'XXXXX'));
+            obj[key] = qnabot.filter_comprehend_pii(val).replace(re,'XXXXX');
         } else if ( key === "recentIntentSummaryView") {
             if (val) {
                 processKeysForRegEx(val, re);
             }
         } else {
             if (typeof val === 'string') {
-                obj[key] = qnabot.filter_comprehend_pii(val.replace(re,'XXXXX'));
+                obj[key] = qnabot.filter_comprehend_pii(val).replace(re,'XXXXX');
             }
         }
     });
