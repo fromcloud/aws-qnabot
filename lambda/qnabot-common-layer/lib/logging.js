@@ -15,6 +15,7 @@ function filter_comprehend_pii(text) {
     }
 
     let regex = process.env.found_comprehend_pii.split(",").map(pii => `(${pii})`).join("|")
+    // console.log("PII REGEX: " + regex)
     let re = new RegExp(regex, "g");
 
     return text.replace(re, "XXXXXX");
@@ -39,19 +40,20 @@ const filter = text => {
         text = text.replace(/"accesstokenjwt":\s*"[^"]+?([^\/"]+)"/g, '"accesstokenjwt":"<token redacted>"');
         text = text.replace(/"idtokenjwt":\s*"[^"]+?([^\/"]+)"/g, '"idtokenjwt":"<token redacted>"');
         text = text.replace(/"refreshtoken":\s*"[^"]+?([^\/"]+)"/g, '"refreshtoken":"<token redacted>"');
-        if (process.env.QNAREDACT === "true") {
-            if (process.env.REDACTING_REGEX) {
-                let re = new RegExp(process.env.REDACTING_REGEX, "g");
-                text = text.replace(re, "XXXXXX");
-            }
-            text = filter_comprehend_pii(text)        }
+        text = filter_comprehend_pii(text)
+    }
+    if (process.env.QNAREDACT === "true") {
+        if (process.env.REDACTING_REGEX) {
+            let re = new RegExp(process.env.REDACTING_REGEX, "g");
+            text = text.replace(re, "XXXXXX");
+        }
     }
     return text
 };
 
 const comprehend_client = new AWS.Comprehend();
 
-async function isPIIDetected(text, useComprehendForPII, piiRegex, pii_rejection_entity_types,pii_confidence_score=.99) {
+async function isPIIDetected(text, useComprehendForPII, piiRegex, pii_rejection_entity_types, pii_confidence_score = .99) {
 
     let found_redacted_pii = false
     if (piiRegex) {
@@ -68,7 +70,6 @@ async function isPIIDetected(text, useComprehendForPII, piiRegex, pii_rejection_
         };
         try {
             var comprehendResult = await comprehend_client.detectPiiEntities(params).promise();
-            process.env.comprenhend_pii = comprehendResult //This will be used by the filter.
             if (!("Entities" in comprehendResult) || comprehendResult.Entities.length == 0) {
                 console.log("No PII found by Comprehend")
                 return false;
