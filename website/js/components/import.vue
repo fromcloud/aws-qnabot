@@ -392,7 +392,7 @@ module.exports = {
            while(true){
              var userQuestion = question["question"+counter] 
               if(userQuestion != undefined){
-                question.q.push(userQuestion)
+              question.q.push(userQuestion.replace(/(\r\n|\n|\r)/gm," "))
                 delete question["question"+counter]
                 counter++
               }else{
