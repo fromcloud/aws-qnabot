@@ -222,6 +222,7 @@ var apply_handlebars = async function (req, res, hit) {
     var a = _.get(hit, "a");
     var markdown = _.get(hit, "alt.markdown");
     var ssml = _.get(hit, "alt.ssml");
+    var tease = _.get(hit,"alt.tease");
     var rp = _.get(hit, "rp", _.get(req, '_settings.DEFAULT_ALEXA_REPROMPT'));
     var r = _.get(hit, "r");
 
@@ -262,7 +263,19 @@ var apply_handlebars = async function (req, res, hit) {
             throw (e);
         }
     }
-    if (rp) {
+    if (tease) {
+        try {
+            var tease_template = Handlebars.compile(tease);
+            hit_out.alt.tease = tease_template(context);
+            if (autotranslate){
+                _.set(hit_out, 'autotranslate.alt.tease', true);
+            } 
+        } catch (e) {
+            console.log("ERROR: tease caused Handlebars exception. Check syntax: ", ssml)
+            throw (e);
+        }
+    }
+        if (rp) {
         try {
             var rp_template = Handlebars.compile(rp);
             hit_out.rp = rp_template(context);
