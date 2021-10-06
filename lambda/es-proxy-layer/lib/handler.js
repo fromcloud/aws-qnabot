@@ -6,7 +6,7 @@ var build_es_query=require('./esbodybuilder');
 var kendra = require('./kendraQuery');
 var AWS=require('aws-sdk');
 
-const qnabot = require("/opt/lib/logging")
+const qnabot = require("qnabot/logging")
 
 
 function isJson(str) {
@@ -144,7 +144,7 @@ async function run_query_kendra(event, kendra_index) {
 
 
 module.exports= async (event, context, callback) => {
-    //try {
+    try {
         var settings = await get_settings();
         qnabot.log('Received event:', JSON.stringify(event, null, 2));
 
@@ -167,13 +167,13 @@ module.exports= async (event, context, callback) => {
         
         qnabot.log("Query response: ", JSON.stringify(response,null,2));
         return callback(null, response);
-    // } catch (error) {
-    //     qnabot.log(`error is ${JSON.stringify(error, null,2)}`);
-    //     return callback(JSON.stringify({
-    //         type:error.response.status===404 ? "[NotFound]":"[InternalServiceError]",
-    //         status:error.response.status,
-    //         message:error.response.statusText,
-    //         data:error.response.data
-    //     }))
-    // }
+    } catch (error) {
+        qnabot.log(`error is ${JSON.stringify(error, null,2)}`);
+        return callback(JSON.stringify({
+            type:error.response.status===404 ? "[NotFound]":"[InternalServiceError]",
+            status:error.response.status,
+            message:error.response.statusText,
+            data:error.response.data
+        }))
+    }
 }

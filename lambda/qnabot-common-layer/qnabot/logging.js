@@ -20,7 +20,6 @@ function filter_comprehend_pii(text) {
 
     return text.replace(re, "XXXXXX");
 
-}
 const filter = text => {
 
     if (process.env.DISABLECLOUDWATCHLOGGING === "true") {

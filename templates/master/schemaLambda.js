@@ -1,4 +1,4 @@
-var fs=require('fs')
+const util = require('../util');
 
 module.exports={
     "SchemaLambdaCodeVersion":{
@@ -43,7 +43,8 @@ module.exports={
             Key:"Type",
             Value:"Api"
         }]
-      }
+      },
+      "Metadata": util.cfnNag(["W92"])
     },
     SchemaLambdaPolicy: {
       Type: "AWS::IAM::ManagedPolicy",
@@ -81,6 +82,11 @@ module.exports={
           ]
         },
         "Path": "/",
+        "Policies": [
+          util.basicLambdaExecutionPolicy(),
+          util.lambdaVPCAccessExecutionRole(),
+          util.xrayDaemonWriteAccess()
+        ],
         "ManagedPolicyArns": [
           "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
           "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
@@ -88,7 +94,8 @@ module.exports={
           {"Ref":"QueryPolicy"},
           {"Ref":"SchemaLambdaPolicy"}
         ]
-      }
+      },
+      "Metadata": util.cfnNag(["W11", "W12"])
     }
 }
 

@@ -1,4 +1,5 @@
-build 
+
+build
 # Logs
 logs
 *.log
@@ -68,6 +69,18 @@ config.json
 
 
 
-.vscode/launch.json
+.vscode/
 utilities/migration.md
+<<<<<<< HEAD
 lambda/kendra-webcrawler/kendra_webcrawler copy.py
+=======
+
+# Temporary folders
+tmp/
+temp/
+
+# derived build assets
+**/deployment/global-s3-assets
+**/deployment/regional-s3-assets
+**/deployment/open-source
+>>>>>>> fix/v12_redaction
