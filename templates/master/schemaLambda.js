@@ -18,6 +18,12 @@ module.exports={
             "S3Key": {"Fn::Sub":"${BootstrapPrefix}/lambda/schema.zip"},
             "S3ObjectVersion":{"Ref":"SchemaLambdaCodeVersion"}
         },
+        Environment: {
+          Variables: {
+            DEFAULT_SETTINGS_PARAM: {Ref: "DefaultQnABotSettings"},
+            CUSTOM_SETTINGS_PARAM: {Ref: "CustomQnABotSettings"}
+          }
+        },
         "Handler": "index.handler",
         "MemorySize": "128",
         "Role": {"Fn::GetAtt": ["SchemaLambdaRole","Arn"]},
@@ -39,6 +45,27 @@ module.exports={
         }]
       },
       "Metadata": util.cfnNag(["W92"])
+      
+    },
+    SchemaLambdaPolicy: {
+      Type: "AWS::IAM::ManagedPolicy",
+      Properties: {
+        PolicyDocument: {
+          Version: "2012-10-17",
+          Statement: [
+            {
+              Effect: "Allow",
+              Action: [
+                "ssm:GetParameter",
+              ],
+              Resource: [
+                {"Fn::Join": ["", ["arn:aws:ssm:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":parameter/", {"Ref": "CustomQnABotSettings"}]]},
+                {"Fn::Join": ["", ["arn:aws:ssm:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":parameter/", {"Ref": "DefaultQnABotSettings"}]]},
+              ],
+            },
+          ],
+        },
+      },
     },
     "SchemaLambdaRole": {
       "Type": "AWS::IAM::Role",
@@ -59,10 +86,12 @@ module.exports={
         "Policies": [
           util.basicLambdaExecutionPolicy(),
           util.lambdaVPCAccessExecutionRole(),
-          util.xrayDaemonWriteAccess()
+          util.xrayDaemonWriteAccess(),
         ],
         "ManagedPolicyArns": [
-          {"Ref":"QueryPolicy"}
+          {"Ref":"QueryPolicy"},
+          {Ref:"SchemaLambdaPolicy"}
+
         ]
       },
       "Metadata": util.cfnNag(["W11", "W12"])
