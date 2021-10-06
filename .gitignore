@@ -71,9 +71,6 @@ config.json
 
 .vscode/
 utilities/migration.md
-<<<<<<< HEAD
-lambda/kendra-webcrawler/kendra_webcrawler copy.py
-=======
 
 # Temporary folders
 tmp/
@@ -83,4 +80,3 @@ temp/
 **/deployment/global-s3-assets
 **/deployment/regional-s3-assets
 **/deployment/open-source
->>>>>>> fix/v12_redaction
