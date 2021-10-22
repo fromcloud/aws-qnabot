@@ -19,6 +19,7 @@ function filter_comprehend_pii(text) {
     let re = new RegExp(regex, "g");
 
     return text.replace(re, "XXXXXX");
+}
 
 const filter = text => {
 
