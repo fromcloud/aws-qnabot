@@ -90,4 +90,3 @@ async function isPIIDetected(text, useComprehendForPII, piiRegex, pii_rejection_
     }
 
 }
-}
