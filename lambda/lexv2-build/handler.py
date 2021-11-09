@@ -28,9 +28,11 @@ BOT_ALIAS = "live"
 LEXV2_BOT_DRAFT_VERSION = "DRAFT"
 LEXV2_TEST_BOT_ALIAS = "TestBotAlias"
 LEXV2_BOT_LOCALE_VOICES = {
+	"de_AT": "Hans",
 	"de_DE": "Hans",
 	"en_AU": "Nicole",
 	"en_GB": "Amy",
+	"en_IN": "Aditi",
 	"en_US": "Joanna",
 	"es_419": "Mia",
 	"es_ES": "Conchita",
@@ -38,7 +40,8 @@ LEXV2_BOT_LOCALE_VOICES = {
 	"fr_CA": "Chantal",
 	"fr_FR": "Mathieu",
 	"it_IT": "Bianca",
-	"ja_JP": "Mizuki"
+	"ja_JP": "Mizuki", 
+	"ko_KR": "Seoyeon"
 }
 
 # if statusFile defined in lambda event, then log build status to specified S3 object
