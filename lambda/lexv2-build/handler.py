@@ -16,7 +16,8 @@ s3 = boto3.resource('s3')
 # LEX QNABOT INFO
 FULFILLMENT_LAMBDA_ARN = os.environ["FULFILLMENT_LAMBDA_ARN"]
 STACKNAME = os.environ["STACKNAME"]
-LEXV2_BOT_LOCALE_IDS = os.environ["LOCALES"].replace(' ','').split(",")
+LEXV2_BOT_LOCALE_IDS = "en_US,es_US,ko_KR"
+# LEXV2_BOT_LOCALE_IDS = os.environ["LOCALES"].replace(' ','').split(",")
 # ensure en_US is always in the list, and that list elements are unique
 LEXV2_BOT_LOCALE_IDS.append("en_US")
 LEXV2_BOT_LOCALE_IDS = list(dict.fromkeys(LEXV2_BOT_LOCALE_IDS))
